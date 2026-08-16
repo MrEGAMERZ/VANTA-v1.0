@@ -166,7 +166,7 @@ const CitizenHome = () => {
           <div className="intel-card">
             <div className="intel-header">
               <ShieldAlert size={20} color="#6366F1" />
-              <h3>VANTA SECURITY BRIEF</h3>
+              <h3>SAMADHAN SECURITY BRIEF</h3>
             </div>
             <p>Every grievance filed is categorized in real-time by the Gemini AI core. Higher severity issues route automatically to ward MLAs or District Collectors.</p>
             <ul className="intel-rules">

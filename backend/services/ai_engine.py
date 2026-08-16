@@ -5,7 +5,7 @@ from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("vanta-ai")
+logger = logging.getLogger("samadhan-ai")
 
 # Check for Gemini API key
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")

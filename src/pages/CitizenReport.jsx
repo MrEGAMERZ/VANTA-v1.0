@@ -259,7 +259,7 @@ const CitizenReport = () => {
               <ArrowRight size={24} />
             </button>
             <div className="terms-text">
-              BY SUBMITTING, YOU AGREE TO VANTA'S DATA VERIFICATION PROTOCOLS.
+              BY SUBMITTING, YOU AGREE TO SAMADHAN'S DATA VERIFICATION PROTOCOLS.
             </div>
           </div>
 

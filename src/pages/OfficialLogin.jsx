@@ -43,7 +43,7 @@ const OfficialLogin = () => {
         navigate('/official/dashboard');
       }
     } catch (err) {
-      showToast(err.message || 'Login failed. Enter email e.g. mla@vanta.gov.in and password "password".', 'error');
+      showToast(err.message || 'Login failed. Enter email e.g. mla@samadhan.gov.in and password "password".', 'error');
     }
   };
 
@@ -213,7 +213,7 @@ const OfficialLogin = () => {
                 type="email"
                 id="signup-email"
                 className="form-input"
-                placeholder="official@vanta.gov.in"
+                placeholder="official@samadhan.gov.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -268,8 +268,8 @@ const OfficialLogin = () => {
         <div className="demo-credentials">
           <div className="demo-credentials-title">DEMO AUTHENTICATION TELETABS</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-            <div>MP Feed: <code>mp@vanta.gov.in</code></div>
-            <div>MLA Feed: <code>mla@vanta.gov.in</code></div>
+            <div>MP Feed: <code>mp@samadhan.gov.in</code></div>
+            <div>MLA Feed: <code>mla@samadhan.gov.in</code></div>
             <div>Password: <code>password</code></div>
           </div>
         </div>

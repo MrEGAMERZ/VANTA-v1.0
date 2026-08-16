@@ -20,7 +20,7 @@ Base.metadata.create_all(bind=engine)
 seed_db()
 
 app = FastAPI(
-    title="VANTA — Governance Intelligence Platform API",
+    title="SAMADHAN — Governance Intelligence Platform API",
     description="Engineered in the dark. Built to last.",
     version="1.0.0"
 )
@@ -84,7 +84,7 @@ async def notify_clients(event_type: str, data: dict):
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "healthy", "platform": "VANTA", "epoch": 2026}
+    return {"status": "healthy", "platform": "SAMADHAN", "epoch": 2026}
 
 # Inject notification helper globally into app state so routes can trigger broadcasts
 app.state.notify_clients = notify_clients

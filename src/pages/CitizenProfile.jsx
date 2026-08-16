@@ -116,7 +116,7 @@ const CitizenProfile = () => {
             <div style={{ marginLeft: 'auto', backgroundColor: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.15)', borderRadius: '10px', padding: '0.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Award size={20} color="var(--cyber-emerald)" />
               <div>
-                <span style={{ fontSize: '0.62rem', color: 'var(--text-muted)', display: 'block', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>VANTA POINTS</span>
+                <span style={{ fontSize: '0.62rem', color: 'var(--text-muted)', display: 'block', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>SAMADHAN POINTS</span>
                 <span style={{ fontSize: '1.15rem', color: 'var(--cyber-emerald)', fontWeight: 700, fontFamily: 'Space Grotesk' }}>{profile.reward_points}</span>
               </div>
             </div>

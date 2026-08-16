@@ -1,6 +1,6 @@
-# VANTA Governance Intelligence Platform
+# SAMADHAN Governance Intelligence Platform
 
-This is the frontend application for **VANTA**, a civic engagement and governance intelligence platform. It is a React-based web application designed to connect citizens with government officials (MLAs, MPs, Collectors) to report, track, and resolve local civic issues. The platform features a role-based access system, real-time updates via WebSockets, and a modern, dark-themed user interface.
+This is the frontend application for **SAMADHAN**, a civic engagement and governance intelligence platform. It is a React-based web application designed to connect citizens with government officials (MLAs, MPs, Collectors) to report, track, and resolve local civic issues. The platform features a role-based access system, real-time updates via WebSockets, and a modern, dark-themed user interface.
 
 ## Table of Contents
 
@@ -26,7 +26,7 @@ This is the frontend application for **VANTA**, a civic engagement and governanc
 
 ## Project Overview
 
-The VANTA platform aims to streamline civic grievance redressal. It allows citizens to file reports, which are then intelligently routed to the appropriate government officials. Officials can manage these complaints, track their resolution status, and gain insights through analytics dashboards. The application is built with a focus on a premium user experience, featuring a dark, cyber-themed aesthetic with real-time data updates.
+The SAMADHAN platform aims to streamline civic grievance redressal. It allows citizens to file reports, which are then intelligently routed to the appropriate government officials. Officials can manage these complaints, track their resolution status, and gain insights through analytics dashboards. The application is built with a focus on a premium user experience, featuring a dark, cyber-themed aesthetic with real-time data updates.
 
 ## Technology Stack
 

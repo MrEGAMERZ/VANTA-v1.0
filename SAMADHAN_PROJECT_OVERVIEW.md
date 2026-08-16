@@ -1,4 +1,4 @@
-# 🛡️ VANTA — Governance Intelligence Platform
+# 🛡️ SAMADHAN — Governance Intelligence Platform
 ### Smart India Hackathon 2025 | PS: SIH25031 | Org: Government of Jharkhand
 > **Theme:** Clean & Green Technology | **Category:** Software
 
@@ -19,9 +19,9 @@ Citizens in India face significant challenges in reporting and tracking the reso
 
 ---
 
-## 🚀 What is VANTA?
+## 🚀 What is SAMADHAN?
 
-**VANTA** (Vigilance And Accountability Network for Transparent Administration) is an **AI-powered civic governance intelligence platform** that connects citizens, ward-level officials (MLAs), District Collectors, and Members of Parliament in a **tiered, self-escalating accountability loop**.
+**SAMADHAN** (Vigilance And Accountability Network for Transparent Administration) is an **AI-powered civic governance intelligence platform** that connects citizens, ward-level officials (MLAs), District Collectors, and Members of Parliament in a **tiered, self-escalating accountability loop**.
 
 It transforms the broken grievance system into a **real-time, AI-triaged, citizen-verified** pipeline where every complaint is tracked, every deadline is enforced, and every official is scored.
 
@@ -137,7 +137,7 @@ WebSocket-powered Leaflet map: new complaints appear on all officials' screens i
 ## 📁 Project Structure
 
 ```
-VANTA-v1.0/
+SAMADHAN-v1.0/
 ├── backend/
 │   ├── main.py              # FastAPI app + WebSocket manager
 │   ├── database.py          # Custom PyMongo ORM adapter
@@ -237,9 +237,9 @@ VANTA-v1.0/
 10. Switch to MP portal → MLA scoreboard + AI DPR for the water pipe zone
 ```
 
-### What Sets VANTA Apart
+### What Sets SAMADHAN Apart
 
-| SIH Criterion | VANTA's Answer |
+| SIH Criterion | SAMADHAN's Answer |
 |---------------|----------------|
 | Problem-Solution Fit | Directly solves every requirement of SIH25031 end-to-end |
 | Technical Depth | Gemini does real work: categorization, criticality scoring, DPR writing |
@@ -268,8 +268,8 @@ npm run dev               # Runs at http://localhost:5173
 
 ### Docker (Production)
 ```bash
-docker build -t vanta .
-docker run -p 8000:8000 --env-file backend/.env vanta
+docker build -t samadhan .
+docker run -p 8000:8000 --env-file backend/.env samadhan
 ```
 
 ---

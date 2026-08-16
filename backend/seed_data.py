@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timedelta
-from sqlalchemy.orm import Session
+from database import Session
 from database import engine, SessionLocal, Base
 from models.models import Citizen, Official, Complaint, Upvote, DevelopmentProject
 from services.ai_engine import calculate_stars_rating
@@ -26,7 +26,7 @@ def seed_db():
             role="MLA",
             jurisdiction="Ward 7, Ward 8, Ward 11",
             phone="9876543210",
-            email="mla@vanta.gov.in",
+            email="mla@samadhan.gov.in",
             avg_response_time=8.9,
             resolution_rate=32.1,
             complaints_assigned=25,
@@ -39,7 +39,7 @@ def seed_db():
             role="MLA",
             jurisdiction="Ward 3, Ward 4, Ward 5",
             phone="9876543211",
-            email="ramesh@vanta.gov.in",
+            email="ramesh@samadhan.gov.in",
             avg_response_time=1.2,
             resolution_rate=88.2,
             complaints_assigned=34,
@@ -52,7 +52,7 @@ def seed_db():
             role="MLA",
             jurisdiction="Ward 9, Ward 10, Ward 12",
             phone="9876543212",
-            email="priya@vanta.gov.in",
+            email="priya@samadhan.gov.in",
             avg_response_time=3.4,
             resolution_rate=64.5,
             complaints_assigned=19,
@@ -65,7 +65,7 @@ def seed_db():
             role="COLLECTOR",
             jurisdiction="Bengaluru South District",
             phone="9876543213",
-            email="collector@vanta.gov.in",
+            email="collector@samadhan.gov.in",
             avg_response_time=4.5,
             resolution_rate=75.0,
             complaints_assigned=12,
@@ -78,7 +78,7 @@ def seed_db():
             role="MP",
             jurisdiction="Bengaluru South Constituency",
             phone="9876543214",
-            email="mp@vanta.gov.in",
+            email="mp@samadhan.gov.in",
             avg_response_time=5.2,
             resolution_rate=70.0,
             complaints_assigned=8,
@@ -91,7 +91,7 @@ def seed_db():
             role="MINISTRY",
             jurisdiction="Karnataka State Housing & Infrastructure",
             phone="9876543215",
-            email="ministry@vanta.gov.in",
+            email="ministry@samadhan.gov.in",
             avg_response_time=2.0,
             resolution_rate=90.0,
             complaints_assigned=5,

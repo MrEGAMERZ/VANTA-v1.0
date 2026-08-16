@@ -16,14 +16,14 @@
 }
 
 /* Custom Marker Styling */
-.vanta-marker {
+.samadhan-marker {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.vanta-marker-inner {
+.samadhan-marker-inner {
   border-radius: 50%;
   background-color: currentColor;
   box-shadow: 0 0 10px currentColor;
@@ -66,17 +66,17 @@
   z-index: -1;
 }
 
-.vanta-popup .leaflet-popup-content-wrapper {
+.samadhan-popup .leaflet-popup-content-wrapper {
   background-color: #111118;
   color: white;
   border: 1px solid #1E1E35;
   border-radius: 8px;
 }
-.vanta-popup .leaflet-popup-tip {
+.samadhan-popup .leaflet-popup-tip {
   background-color: #111118;
   border: 1px solid #1E1E35;
 }
-.vanta-popup .leaflet-popup-content {
+.samadhan-popup .leaflet-popup-content {
   margin: 12px;
 }
 

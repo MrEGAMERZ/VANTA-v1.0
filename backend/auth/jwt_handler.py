@@ -4,7 +4,7 @@ from typing import Union
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 
-SECRET_KEY = os.getenv("SECRET_KEY", "vanta-jwt-hackathon-super-secret-key-1337")
+SECRET_KEY = os.getenv("SECRET_KEY", "samadhan-jwt-hackathon-super-secret-key-1337")
 ALGORITHM = "HS256"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

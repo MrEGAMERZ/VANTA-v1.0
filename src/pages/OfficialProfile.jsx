@@ -137,7 +137,7 @@ const OfficialProfile = () => {
                 className="form-input"
                 value={profile.email}
                 onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                placeholder="official@vanta.gov.in"
+                placeholder="official@samadhan.gov.in"
                 required
                 style={{ width: '100%' }}
               />

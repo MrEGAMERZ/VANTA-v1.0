@@ -1,5 +1,5 @@
 """
-VANTA Backend — Database Configuration
+SAMADHAN Backend — Database Configuration
 Custom Mock ORM wrapping PyMongo to support SQLAlchemy-style syntax.
 """
 import os
@@ -16,7 +16,7 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("vanta-db")
+logger = logging.getLogger("samadhan-db")
 
 # Read database URL
 DATABASE_URL = os.getenv("DATABASE_URL") or os.getenv("MONGODB_URI")

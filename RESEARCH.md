@@ -1,8 +1,8 @@
-# VANTA — Research & Design Document
+# SAMADHAN — Research & Design Document
 ## Crowdsourced Civic Issue Reporting and Resolution System
 ### SIH25031 | Government of Jharkhand | Team H2K
 
-> A living research brief for the entire team. It covers who uses VANTA and why, what is already built, what still needs to be built, and a deep analysis of why every system before ours has failed — and exactly how VANTA is designed to solve those failures.
+> A living research brief for the entire team. It covers who uses SAMADHAN and why, what is already built, what still needs to be built, and a deep analysis of why every system before ours has failed — and exactly how SAMADHAN is designed to solve those failures.
 
 ## TABLE OF CONTENTS
 
@@ -10,15 +10,15 @@
 
 1. [Executive Summary](#1-executive-summary)
 2. [Problem Statement — SIH25031 Alignment](#2-problem-statement--sih25031-alignment)
-3. [What VANTA Handles — Problem Category Taxonomy](#3-what-vanta-handles--problem-category-taxonomy)
+3. [What SAMADHAN Handles — Problem Category Taxonomy](#3-what-samadhan-handles--problem-category-taxonomy)
 4. [Why Existing Systems Have Failed — Research](#4-why-existing-systems-have-failed--research)
-5. [Who Uses VANTA — Complete Government Hierarchy](#5-who-uses-vanta--complete-government-hierarchy)
+5. [Who Uses SAMADHAN — Complete Government Hierarchy](#5-who-uses-samadhan--complete-government-hierarchy)
 6. [Citizen Identity & Trust System](#6-citizen-identity--trust-system)
 7. [Complaint Filing & Authenticity Engine](#7-complaint-filing--authenticity-engine)
 8. [Citizen Reputation Score](#8-citizen-reputation-score)
-9. [Core System Architecture — How VANTA Works](#9-core-system-architecture--how-vanta-works)
+9. [Core System Architecture — How SAMADHAN Works](#9-core-system-architecture--how-samadhan-works)
 10. [Transparency Engine — Procurement & Contractor Accountability](#10-transparency-engine--procurement--contractor-accountability)
-11. [What Makes VANTA Unique](#11-what-makes-vanta-unique)
+11. [What Makes SAMADHAN Unique](#11-what-makes-samadhan-unique)
 12. [Revenue Model](#12-revenue-model)
 13. [Current Build Status](#13-current-build-status)
 14. [Open Design Questions](#14-open-design-questions)
@@ -27,16 +27,16 @@
 
 ## 1. Executive Summary
 
-VANTA is an accountability operating system for civic governance that transforms a passive grievance portal into an action-oriented workflow. 
+SAMADHAN is an accountability operating system for civic governance that transforms a passive grievance portal into an action-oriented workflow. 
 
-**In every other system an official decides when a complaint is resolved. In VANTA only the citizen can.**
+**In every other system an official decides when a complaint is resolved. In SAMADHAN only the citizen can.**
 
 3 Core Innovations:
 1. **The 5-Citizen Community Verification System:** Replaces manual official validation by requiring five GPS-verified citizens to confirm an issue exists before it enters the official's queue.
 2. **Citizen-Triggered Resolution:** A ticket cannot be closed unless the citizen who reported it casts a "YES" vote on the resolution evidence, completely preventing fake administrative closures.
 3. **The Transparency Engine:** A fully integrated public procurement ledger that tracks contractor bids, phase-wise payments, and milestone completions publicly for every resolved complaint.
 
-**SIH Alignment Statement:** VANTA directly solves the SIH25031 problem statement by providing a comprehensive "Crowdsourced Civic Issue Reporting and Resolution System" that is scalable, transparent, and built with accountability mechanisms specifically designed for the Government of Jharkhand.
+**SIH Alignment Statement:** SAMADHAN directly solves the SIH25031 problem statement by providing a comprehensive "Crowdsourced Civic Issue Reporting and Resolution System" that is scalable, transparent, and built with accountability mechanisms specifically designed for the Government of Jharkhand.
 
 ---
 
@@ -46,11 +46,11 @@ India has over 640,000 villages and 8,000+ urban local bodies. Every single day,
 
 The problem statement for SIH25031 calls for a Crowdsourced Civic Issue Reporting and Resolution System that empowers citizens to highlight their community problems and ensures these problems reach the right authorities in a timely and structured manner.
 
-VANTA is the answer because it is not merely a reporting tool; it is a full-stack civic operating system. While existing portals act as passive digital suggestion boxes where complaints get lost, ignored, or falsely closed, VANTA enforces accountability through automated routing, public performance scoreboards for officials, and mandatory citizen verification to confirm successful resolution.
+SAMADHAN is the answer because it is not merely a reporting tool; it is a full-stack civic operating system. While existing portals act as passive digital suggestion boxes where complaints get lost, ignored, or falsely closed, SAMADHAN enforces accountability through automated routing, public performance scoreboards for officials, and mandatory citizen verification to confirm successful resolution.
 
 ---
 
-## 3. What VANTA Handles — Problem Category Taxonomy
+## 3. What SAMADHAN Handles — Problem Category Taxonomy
 
 ### 3.1 Master Category List
 ### CATEGORY 1 — ROADS & FOOTPATHS 🛣️
@@ -197,7 +197,7 @@ Sub-categories:
 
 First Responder:  Health Inspector / Sanitation Inspector
 Auto-escalate:    Disease outbreak = CRITICAL immediately
-Note:             VANTA does NOT handle medical treatment
+Note:             SAMADHAN does NOT handle medical treatment
                   complaints — only PUBLIC SPACE health hazards
 ```
 
@@ -292,7 +292,7 @@ Sub-categories:
   10.7  Post office infrastructure issue
   10.8  Government scheme camp / awareness drive not held
 
-IMPORTANT: VANTA handles only PHYSICAL ACCESS and
+IMPORTANT: SAMADHAN handles only PHYSICAL ACCESS and
            INFRASTRUCTURE failures in this category.
            Financial fraud, corruption in schemes,
            and individual benefit disputes are OUT OF SCOPE.
@@ -320,7 +320,7 @@ Being explicit about scope prevents misuse and keeps the platform focused:
   → Social media / cyber crime
   → Any issue inside a private residence
 
-✅ IN SCOPE — THE VANTA DOMAIN:
+✅ IN SCOPE — THE SAMADHAN DOMAIN:
   → Any problem visible in a public space
   → Infrastructure that the government is responsible for
   → Services the government is obligated to provide
@@ -329,7 +329,7 @@ Being explicit about scope prevents misuse and keeps the platform focused:
     is the responsible party
 ```
 
-When a citizen tries to file an out-of-scope complaint, VANTA's AI:
+When a citizen tries to file an out-of-scope complaint, SAMADHAN's AI:
 1. Flags it as out-of-scope
 2. Tells the citizen which portal to use instead
 3. Does NOT create a ticket
@@ -375,7 +375,7 @@ Studies and RTI responses reveal that a significant fraction of "disposed" compl
 
 **The consequence:** Citizens file, see "Closed" status, check the road — the pothole is still there. They stop filing. The system reports high resolution rates. Nobody is accountable.
 
-**How VANTA solves it:** Ticket closure requires TWO independent confirmations:
+**How SAMADHAN solves it:** Ticket closure requires TWO independent confirmations:
 1. Official submits photo evidence of resolution
 2. Citizen casts a YES vote confirming resolution is real
 
@@ -391,7 +391,7 @@ If the citizen votes NO, the ticket automatically reopens with the label "FALSE 
 
 **Real-world data:** Research in Boston showed that public spending on pothole repair did not correlate with high-volume complaint areas identified in the 311 app. The data was there. Nobody acted on it.
 
-**How VANTA solves it:** VANTA IS the work-order system. The complaint does not go into a separate "suggestion box" — it goes directly into the dashboard of the assigned official (Ward Councillor, MLA, or Collector) who has authority and responsibility to act. The official's entire performance score on VANTA is tied to resolving the complaints in their queue.
+**How SAMADHAN solves it:** SAMADHAN IS the work-order system. The complaint does not go into a separate "suggestion box" — it goes directly into the dashboard of the assigned official (Ward Councillor, MLA, or Collector) who has authority and responsibility to act. The official's entire performance score on SAMADHAN is tied to resolving the complaints in their queue.
 
 ---
 
@@ -410,7 +410,7 @@ Once this cycle starts, it is almost impossible to break without a fundamental r
 
 **Specific failure mode:** The Swachhata App's "gamification" (points for uploading cleanliness photos) created perverse incentives. Officials "resolved" issues by taking photos of DIFFERENT clean areas and uploading them as proof.
 
-**How VANTA solves it:** 
+**How SAMADHAN solves it:** 
 - Citizens are explicitly invited back into the loop after every resolution (push notification: "Your complaint was marked resolved — was it actually fixed?")
 - Community upvotes mean other citizens can amplify an unresolved complaint even if the original reporter has given up
 - The public scoreboard of officials creates social pressure from peers, not just citizens
@@ -427,10 +427,10 @@ Once this cycle starts, it is almost impossible to break without a fundamental r
 - Junior officials were not empowered to act — every action required sign-off from seniors
 - The app was seen as "extra work" on top of existing processes, not a replacement for them
 
-**How VANTA solves it:** 
+**How SAMADHAN solves it:** 
 - Auto-escalation creates an INCENTIVE to resolve. If a junior official resolves the complaint quickly, they score points. If they ignore it, it goes to their senior automatically — creating embarrassment and formal accountability.
 - The complaint is routed directly to the person with authority, not CC'd to a chain of seniors.
-- VANTA's dashboard IS the primary work surface, not a side system.
+- SAMADHAN's dashboard IS the primary work surface, not a side system.
 
 ---
 
@@ -440,7 +440,7 @@ Once this cycle starts, it is almost impossible to break without a fundamental r
 
 This means the app inadvertently improves services for those who are already better-served, while the most vulnerable communities have no voice.
 
-**How VANTA addresses it:**
+**How SAMADHAN addresses it:**
 - Voice-to-text complaint filing in Hindi (and planned regional languages) — no typing required
 - Phone OTP login — no email, no app store account, no digital literacy required beyond calling a number
 - SMS fallback planned (for feature phones) — file a complaint via a structured SMS
@@ -454,7 +454,7 @@ This means the app inadvertently improves services for those who are already bet
 
 Similarly, some platforms allowed officials to forward complaints to other departments indefinitely. A complaint would bounce between PWD and Municipal Corporation for months, each claiming it fell under the other's jurisdiction.
 
-**How VANTA solves it:**
+**How SAMADHAN solves it:**
 - AI classification happens before the complaint reaches any official — it cannot be reclassified by the receiving official
 - Jurisdiction is determined by geographic pin (the Leaflet map location) — the ward boundary determines the responsible official, not self-declaration
 - Forwarding complaints to another department still counts against the original official's deadline — the clock does not reset on transfer
@@ -467,7 +467,7 @@ Similarly, some platforms allowed officials to forward complaints to other depar
 
 **International parallel:** SeeClickFix's study found that the single largest predictor of complaint resolution was whether the mayor's office was personally monitoring the platform. When political pressure existed, things got fixed. Without it, things rotted.
 
-**How VANTA solves it:** VANTA makes accountability **public and quantified**:
+**How SAMADHAN solves it:** SAMADHAN makes accountability **public and quantified**:
 - Every official has a live Accountability Score visible to the tier above them
 - The MP's scoreboard shows every MLA's performance ranking — creating peer pressure among elected officials
 - False closure penalties are immediate and visible
@@ -508,9 +508,9 @@ Result: 100% disposal rate in the system. 0% actual resolution.
 4. **No citizen power** — citizens can "appeal" but the appeal goes to the same department
 5. **Lack of evidence standards** — "resolution notes" can be any text; no photo or location required
 
-### VANTA's Anti-False-Closure Architecture
+### SAMADHAN's Anti-False-Closure Architecture
 
-VANTA is the first system to make citizen verification **mandatory and consequential**:
+SAMADHAN is the first system to make citizen verification **mandatory and consequential**:
 
 ```
 STEP 1 — Official submits resolution
@@ -541,16 +541,16 @@ STEP 3C — Citizen does not respond in 48h
 
 ### Community Verification as Backup
 
-Even if the original citizen does not respond (migrated, lost phone, etc.), VANTA enables **community verification**:
+Even if the original citizen does not respond (migrated, lost phone, etc.), SAMADHAN enables **community verification**:
 - Other citizens in the same ward who upvoted the original complaint are notified
 - Any 3 community members voting NO on a closed complaint can trigger a "Contested Resolution" review
 - This goes to the tier above the responsible official for manual review
 
 ---
 
-### 4.9 VANTA's Solutions to Each Failure Mode
+### 4.9 SAMADHAN's Solutions to Each Failure Mode
 
-| Failure Mode | Existing System Response | VANTA's Response |
+| Failure Mode | Existing System Response | SAMADHAN's Response |
 |-------------|--------------------------|-----------------|
 | Procedural closure without real action | Complaint marked "Disposed" administratively | Citizen must vote YES before status reaches RESOLVED |
 | Official reclassifying complaints to avoid accountability | No safeguard | AI classifies before official sees it; classification locked |
@@ -558,18 +558,18 @@ Even if the original citizen does not respond (migrated, lost phone, etc.), VANT
 | No consequence for non-performance | Internal metrics, no public visibility | Live public scoreboard; score affects MPLADS recommendations |
 | False photo evidence | No photo required OR no verification | Photo required + citizen verifies it matches the actual location |
 | Digital divide excluding poor communities | English-only, app-only | Hindi voice input, SMS-only filing planned, OTP login |
-| "Black hole" — reports not reaching field workers | App separate from work-order system | VANTA IS the work-order system for officials |
+| "Black hole" — reports not reaching field workers | App separate from work-order system | SAMADHAN IS the work-order system for officials |
 | Reporting fatigue — citizens stop filing | No mechanism to re-engage | Citizens receive push notifications on status changes; community upvotes extend complaint life |
 | Administrative resistance | No incentive to use the platform | Auto-escalation creates incentive: resolve it or it goes to your boss |
 | No inter-complaint learning | Each complaint handled in isolation | AI clusters complaints into systemic issues → DPR generation |
 
 ---
 
-## 5. Who Uses VANTA — Complete Government Hierarchy
+## 5. Who Uses SAMADHAN — Complete Government Hierarchy
 
 ### 5.1 The Three-Tier Constitutional Structure
 
-India's Constitution distributes civic responsibility across three tiers, each with a defined domain. VANTA maps complaints up and down this structure automatically.
+India's Constitution distributes civic responsibility across three tiers, each with a defined domain. SAMADHAN maps complaints up and down this structure automatically.
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
@@ -587,7 +587,7 @@ India's Constitution distributes civic responsibility across three tiers, each w
 ╚══════════════════════════════════════════════════════════════╝
 ```
 
-90% of all civic complaints in VANTA — roads, water, drainage, streetlights, garbage — are resolved at **Tier 3**. VANTA routes there first. Tiers 1 and 2 only receive complaints that Tier 3 cannot or will not handle.
+90% of all civic complaints in SAMADHAN — roads, water, drainage, streetlights, garbage — are resolved at **Tier 3**. SAMADHAN routes there first. Tiers 1 and 2 only receive complaints that Tier 3 cannot or will not handle.
 
 ---
 
@@ -597,31 +597,31 @@ India's Constitution distributes civic responsibility across three tiers, each w
 
 ### ━━━ CENTRAL GOVERNMENT LEVEL ━━━
 
-These officials appear in VANTA only for the most extreme systemic failures or MPLADS fund allocation. Day-to-day complaints do not reach here.
+These officials appear in SAMADHAN only for the most extreme systemic failures or MPLADS fund allocation. Day-to-day complaints do not reach here.
 
 ---
 
 #### Prime Minister / PMO
 ```
-Role in VANTA:  None for individual complaints.
+Role in SAMADHAN:  None for individual complaints.
                 Visible in: National analytics dashboard only.
-                VANTA can generate national-level civic
+                SAMADHAN can generate national-level civic
                 health reports for PMO consumption.
 ```
 
 #### Cabinet Minister — Urban Development / Rural Development / Jal Shakti / Power
 ```
-Role in VANTA:  Policy oversight. Receives aggregated
+Role in SAMADHAN:  Policy oversight. Receives aggregated
                 state-level reports if state-wide systemic
                 failure is detected (e.g., entire state's
                 water supply infrastructure failing).
-Login:          Not on VANTA platform directly.
-                Receives PDF reports from VANTA API.
+Login:          Not on SAMADHAN platform directly.
+                Receives PDF reports from SAMADHAN API.
 ```
 
 #### MP — Member of Parliament (Lok Sabha / Rajya Sabha)
 ```
-Role in VANTA:  ★ ACTIVE USER — Tier 4 in escalation chain
+Role in SAMADHAN:  ★ ACTIVE USER — Tier 4 in escalation chain
 Jurisdiction:   Parliamentary Constituency
                 (~15–25 Assembly Constituencies)
 Login:          Parliament Secretariat issued credentials
@@ -645,13 +645,13 @@ Primary function:
 
 #### Governor of Jharkhand
 ```
-Role in VANTA:  None. Constitutional/ceremonial head.
+Role in SAMADHAN:  None. Constitutional/ceremonial head.
                 Not part of the resolution chain.
 ```
 
 #### Chief Minister (CM)
 ```
-Role in VANTA:  Receives state-wide VANTA monthly report.
+Role in SAMADHAN:  Receives state-wide SAMADHAN monthly report.
                 Can view macro analytics dashboard.
                 Not part of individual complaint chain.
 Login:          Special read-only analytics access
@@ -672,7 +672,7 @@ so may receive department-specific escalation reports.
 
 #### Cabinet Minister — State Level
 ```
-Departments relevant to VANTA:
+Departments relevant to SAMADHAN:
   → Urban Development & Housing
   → Rural Development
   → Drinking Water & Sanitation
@@ -682,14 +682,14 @@ Departments relevant to VANTA:
   → Health (for civic health hazards)
   → Environment & Forests (for pollution/waste)
 
-Role in VANTA:  Tier 5 in escalation chain.
+Role in SAMADHAN:  Tier 5 in escalation chain.
                 Receives only score 90–100 systemic complaints.
 Login:          State secretariat email + password
 ```
 
 #### Chief Secretary (IAS — Senior most civil servant in state)
 ```
-Role in VANTA:  Receives weekly district performance digest.
+Role in SAMADHAN:  Receives weekly district performance digest.
                 Intervention authority over all districts.
 Login:          NIC email access — read-only analytics
 ```
@@ -697,7 +697,7 @@ Login:          NIC email access — read-only analytics
 #### Principal Secretary / Secretary — Relevant Departments
 ```
 PWD Secretary, Urban Dev Secretary, Water Secretary etc.
-Role in VANTA:  Department-specific escalations.
+Role in SAMADHAN:  Department-specific escalations.
                 If all road complaints in a district go
                 unresolved → PWD Secretary is auto-notified.
 ```
@@ -708,7 +708,7 @@ Jurisdiction:   Division (group of districts)
                 Jharkhand has 5 Divisions:
                 Ranchi, Dhanbad, Palamu, Santhal Pargana,
                 Kolhan
-Role in VANTA:  Receives multi-district pattern alerts.
+Role in SAMADHAN:  Receives multi-district pattern alerts.
                 Not in standard escalation chain —
                 only for systemic regional failures.
 ```
@@ -717,19 +717,19 @@ Role in VANTA:  Receives multi-district pattern alerts.
 
 ### ━━━ DISTRICT LEVEL — Core Executive Tier ━━━
 
-This is where real administrative power sits. The Collector is the single most important official for VANTA's escalation chain.
+This is where real administrative power sits. The Collector is the single most important official for SAMADHAN's escalation chain.
 
 ---
 
 #### District Collector / Deputy Commissioner (IAS)
 ```
-Role in VANTA:  ★ ACTIVE USER — Tier 3 in escalation chain
+Role in SAMADHAN:  ★ ACTIVE USER — Tier 3 in escalation chain
                 Most powerful executive at district level.
 Jurisdiction:   Entire district (Jharkhand has 24 districts)
 Login:          NIC gov email (@jharkhand.gov.in or @nic.in)
 Dashboard:      /official/dashboard (Collector role)
 
-Powers on VANTA:
+Powers on SAMADHAN:
   → Receives MLA-escalated complaints
   → Can force-override and resolve any complaint in district
   → Can issue directions logged and tracked permanently
@@ -744,14 +744,14 @@ Penalty for miss: Score -10, escalates to MP
 
 #### Additional District Collector (ADC)
 ```
-Role in VANTA:  Receives complaints when Collector is
+Role in SAMADHAN:  Receives complaints when Collector is
                 unavailable. Same dashboard, sub-role.
 ```
 
 #### Sub-Divisional Magistrate / Sub-Divisional Officer (SDO)
 ```
 Jurisdiction:   Sub-division (multiple blocks)
-Role in VANTA:  Intermediary between Collector and BDO.
+Role in SAMADHAN:  Intermediary between Collector and BDO.
                 Receives HIGH criticality complaints in
                 their sub-division.
 Login:          District admin credentials
@@ -759,8 +759,8 @@ Login:          District admin credentials
 
 #### District Development Commissioner (DDC)
 ```
-Role in VANTA:  Reviews Development Project Reports (DPRs)
-                generated by VANTA AI from complaint clusters.
+Role in SAMADHAN:  Reviews Development Project Reports (DPRs)
+                generated by SAMADHAN AI from complaint clusters.
                 Approves district-level project budgets.
 ```
 
@@ -772,7 +772,7 @@ Executive Engineer — JBVNL (Electrical)
 Chief Medical Officer — District Health
 District Education Officer
 
-Role in VANTA:  Receives department-specific complaints
+Role in SAMADHAN:  Receives department-specific complaints
                 routed by category.
                 Roads → PWD Executive Engineer
                 Water → Jal Shakti Executive Engineer
@@ -790,14 +790,14 @@ and manage the Work Order system (Section 9).
 
 #### MLA — Member of Legislative Assembly
 ```
-Role in VANTA:  ★ ACTIVE USER — Tier 2 in escalation chain
+Role in SAMADHAN:  ★ ACTIVE USER — Tier 2 in escalation chain
 Jurisdiction:   Assembly Constituency
                 (Jharkhand has 81 Assembly Constituencies)
                 Each covers ~200,000–300,000 citizens
 Login:          Jharkhand Legislative Assembly credentials
 Dashboard:      /mla/dashboard
 
-Powers on VANTA:
+Powers on SAMADHAN:
   → Receives Ward-level escalated complaints
   → Views constituency-wide heatmap
   → Accountability score visible to MP above them
@@ -822,18 +822,18 @@ This is where 90% of urban complaints are FIRST ROUTED.
 ```
 Mayor (Elected)
   → Highest elected official in city
-  → Role in VANTA: Receives city-wide analytics.
+  → Role in SAMADHAN: Receives city-wide analytics.
                    Political accountability for all
                    unresolved complaints in the city.
   → Login: Mayor's office credentials (read-only analytics)
 
 Deputy Mayor (Elected)
   → Assists Mayor, often a specific portfolio holder
-  → Role in VANTA: Same as Mayor
+  → Role in SAMADHAN: Same as Mayor
 
 Municipal Commissioner (IAS/State Service — Executive head)
   → Actual executive in charge of day-to-day operations
-  → Role in VANTA: ★ ACTIVE USER
+  → Role in SAMADHAN: ★ ACTIVE USER
                    Receives escalated complaints from
                    Ward Councillors
                    Approves Work Orders above ₹10 lakh
@@ -842,7 +842,7 @@ Municipal Commissioner (IAS/State Service — Executive head)
 
 Additional Commissioner / Zonal Commissioner
   → City divided into zones, Zonal Commissioner manages zone
-  → Role in VANTA: Zone-level complaint oversight
+  → Role in SAMADHAN: Zone-level complaint oversight
 
 Chief Engineer — Municipal
   → Reviews all engineering-category complaints citywide
@@ -850,10 +850,10 @@ Chief Engineer — Municipal
 
 Ward Officer / Zonal Officer (Administrative)
   → Below Commissioner, manages clusters of wards
-  → Role in VANTA: First administrative escalation from Councillor
+  → Role in SAMADHAN: First administrative escalation from Councillor
 
 Ward Councillor (Elected — MOST IMPORTANT GROUND-LEVEL OFFICIAL)
-  ★ FIRST RESPONDER — Tier 1A in VANTA escalation chain
+  ★ FIRST RESPONDER — Tier 1A in SAMADHAN escalation chain
   → Jurisdiction: 1 ward (~10,000–30,000 citizens)
   → Jharkhand's Ranchi Municipal Corporation: 53 wards
   → Login: Corp-issued ID + password
@@ -866,7 +866,7 @@ Ward Councillor (Elected — MOST IMPORTANT GROUND-LEVEL OFFICIAL)
 
 #### Junior Engineer / Assistant Engineer (Ward-level)
 ```
-Role in VANTA:  ★ TECHNICAL RESPONDER — Tier 1B
+Role in SAMADHAN:  ★ TECHNICAL RESPONDER — Tier 1B
 Jurisdiction:   Department-specific within ward/zone
   → Roads JE → Road and footpath complaints
   → Water JE → Pipe, drainage, sewage complaints
@@ -881,15 +881,15 @@ Function:       Assigned complaints by their senior
 
 #### Sanitation Inspector / Health Inspector
 ```
-Role in VANTA:  Handles garbage, cleanliness, disease-hazard
+Role in SAMADHAN:  Handles garbage, cleanliness, disease-hazard
                 complaints. Reports to Ward Officer.
 ```
 
 #### Safai Karamchari / Field Worker
 ```
-Role in VANTA:  Not a login user. Tagged in Work Orders
+Role in SAMADHAN:  Not a login user. Tagged in Work Orders
                 as the assigned field staff.
-                Their supervisor is accountable on VANTA.
+                Their supervisor is accountable on SAMADHAN.
 ```
 
 ---
@@ -904,30 +904,30 @@ Jharkhand Panchayati Raj Act, 2001 — Three-tier structure.
 ```
 President / Adhyaksha (Elected)
   → Elected head of district-level panchayat
-  → Role in VANTA: Receives district rural analytics.
+  → Role in SAMADHAN: Receives district rural analytics.
                    Equivalent to Mayor but for rural areas.
   → Login: District Panchayat credentials
 
 CEO — Zila Parishad (IAS/State Service)
   → Executive head, like Municipal Commissioner for rural
-  → Role in VANTA: Escalation point for Panchayat Samiti
+  → Role in SAMADHAN: Escalation point for Panchayat Samiti
                    failures. Approves large rural work orders.
 
 Zila Parishad Members (Elected, one per constituency)
-  → Role in VANTA: Read-only analytics for their area
+  → Role in SAMADHAN: Read-only analytics for their area
 ```
 
 #### Panchayat Samiti / Block Panchayat (Block-level)
 ```
 Pramukh / Block Panchayat President (Elected)
   → Head of block-level panchayat
-  → Role in VANTA: Receives escalations from Sarpanch level
+  → Role in SAMADHAN: Receives escalations from Sarpanch level
   → Login: Block panchayat credentials
 
 Block Development Officer — BDO (Government Officer)
   ★ CRITICAL RURAL OFFICIAL — Tier 2 in rural escalation
   → Most important government officer at block level
-  → Role in VANTA: Receives Sarpanch-escalated complaints
+  → Role in SAMADHAN: Receives Sarpanch-escalated complaints
                    Manages MGNREGS, rural scheme funds
                    Approves rural work orders
   → Login: Block office credentials
@@ -953,26 +953,26 @@ Up-Sarpanch (Deputy Sarpanch)
 
 Ward Panch / Gram Panchayat Ward Member (Elected)
   → One per village ward within the GP
-  → Role in VANTA: Not a primary login user
+  → Role in SAMADHAN: Not a primary login user
                    Can be tagged in complaints as the
                    responsible local representative
   → Assists Sarpanch in ground-level verification
 
 Gram Sevak (Government Employee assigned to GP)
   → Technical and administrative support for GP
-  → Role in VANTA: Field verification of complaints
+  → Role in SAMADHAN: Field verification of complaints
                    Signs off on work completion
 
 Panchayat Secretary
   → Administrative head of GP office
-  → Role in VANTA: Manages GP's official account,
+  → Role in SAMADHAN: Manages GP's official account,
                    files Work Orders, tracks contractor
 ```
 
 #### Gram Sabha (Not an official — but constitutionally powerful)
 ```
 The assembly of ALL voters in a village.
-Role in VANTA:  The community verification system
+Role in SAMADHAN:  The community verification system
                 (Section 10.3) is essentially a digital
                 Gram Sabha — any registered voter can
                 verify, upvote, or dispute a complaint
@@ -982,7 +982,7 @@ Role in VANTA:  The community verification system
 
 ---
 
-### 5.8 Complete VANTA Escalation Map
+### 5.8 Complete SAMADHAN Escalation Map
 
 ```
 COMPLAINT FILED
@@ -1076,7 +1076,7 @@ State Ministry      ✅ State (dept)    ✅ Dept only   ✅ Dept metrics  ✅ (E
 | MP | Email + Password | Lok Sabha / Rajya Sabha Secretariat | |
 | Ministry Official | Email + Password | State / Central Secretariat | |
 
-**Implementation Note:** In VANTA v1.0, official credentials are provisioned by an admin (super-user) who seeds the database. In production, this integrates with NIC's National Identity Platform or state-specific SSO. Any official with a `.gov.in` or NIC email should be able to self-register pending admin approval.
+**Implementation Note:** In SAMADHAN v1.0, official credentials are provisioned by an admin (super-user) who seeds the database. In production, this integrates with NIC's National Identity Platform or state-specific SSO. Any official with a `.gov.in` or NIC email should be able to self-register pending admin approval.
 
 ---
 
@@ -1146,7 +1146,7 @@ Badge on profile:  🟢 Resident Verified
  Can Verify     │  ❌        │  │  ✅        │  │  ✅✅      │
                 └────────────┘  └────────────┘  └────────────┘
 
-Upgrade path is voluntary. Citizens can use VANTA forever
+Upgrade path is voluntary. Citizens can use SAMADHAN forever
 at Level 0. Aadhaar verification is an OPT-IN that unlocks
 higher capability — never a gate that blocks filing.
 ```
@@ -1188,7 +1188,7 @@ RULE C — Ward Boundary Awareness
 ```
 
 **GPS Spoofing Detection:**
-Mock location apps are common. VANTA detects spoofing by:
+Mock location apps are common. SAMADHAN detects spoofing by:
 - Cross-referencing mobile network cell tower location with GPS
 - Detecting if GPS coordinates change impossibly fast between recent actions
 - Flagging VPN usage (IP geolocation vs GPS mismatch)
@@ -1253,7 +1253,7 @@ We flag it for community verification — not reject it.
 
 ```
 Photo hash compared against:
-  → VANTA's own database of previously submitted photos
+  → SAMADHAN's own database of previously submitted photos
     (catches the exact same image used on multiple tickets)
   → Stock photo / internet image signatures
 
@@ -1375,7 +1375,7 @@ If a complaint is filed at a location that has had 3 or more resolved complaints
 
 ### 7.4 The 5-Citizen Community Verification System
 
-This is VANTA's most powerful anti-fake-ticket mechanism — and simultaneously its most powerful **user acquisition engine.**
+This is SAMADHAN's most powerful anti-fake-ticket mechanism — and simultaneously its most powerful **user acquisition engine.**
 
 ### How It Works
 
@@ -1390,7 +1390,7 @@ Visible in: Nearby Citizens' "Verify Issues" feed
 Official sees: Nothing yet (not in their queue)
          │
          ▼
-VANTA sends notifications to citizens
+SAMADHAN sends notifications to citizens
 registered within 500m of the issue:
   "Someone near you reported an issue.
    Have you seen it? Your verification
@@ -1490,18 +1490,18 @@ This is the feature that drives organic downloads:
 ```
 SCENARIO:
   Citizen A files a complaint about a pothole
-  VANTA needs 5 verifiers from the neighbourhood
+  SAMADHAN needs 5 verifiers from the neighbourhood
   
   Citizen A shares the complaint link to:
     → Their building's WhatsApp group
     → Neighbours they know personally
   
   Recipients click the link:
-    → If they have VANTA: opens app directly
-    → If they DON'T have VANTA: opens to a web page
-      showing the complaint + "Download VANTA to verify"
+    → If they have SAMADHAN: opens app directly
+    → If they DON'T have SAMADHAN: opens to a web page
+      showing the complaint + "Download SAMADHAN to verify"
   
-  They download VANTA, verify the complaint (+5 pts),
+  They download SAMADHAN, verify the complaint (+5 pts),
   and are now active users who will file their own
   complaints in future.
 
@@ -1726,7 +1726,7 @@ gemini_reasoning, analysed_at
                     MORE USERS
                         ↑
           Every complaint needs 5 verifiers
-          Verifiers must download VANTA
+          Verifiers must download SAMADHAN
                         │
                         ▼
            BETTER QUALITY COMPLAINTS
@@ -1757,13 +1757,13 @@ gemini_reasoning, analysed_at
 
 This is the flywheel. Every feature in this section feeds the next. The verification requirement drives downloads. Downloads create verifiers. Verifiers create quality. Quality creates official response. Official response creates citizen trust. Citizen trust creates more downloads.
 
-No other civic app in India has built this loop. **VANTA is the first.**
+No other civic app in India has built this loop. **SAMADHAN is the first.**
 
 ---
 
-## 9. Core System Architecture — How VANTA Works
+## 9. Core System Architecture — How SAMADHAN Works
 
-The VANTA ecosystem relies on a robust 4-engine pipeline to autonomously classify, route, escalate, and verify civic complaints.
+The SAMADHAN ecosystem relies on a robust 4-engine pipeline to autonomously classify, route, escalate, and verify civic complaints.
 
 ### 9.1 AI Analysis Engine
 At the core is the AI Analysis Engine powered by Gemini 2.0 Flash (with a local keyword classifier fallback). It analyzes incoming complaints to determine the correct taxonomy category and dynamically assigns a criticality score (0-100), ensuring issues like a burst water pipe are prioritized over a faded road marking.
@@ -1840,9 +1840,9 @@ MONEY GONE ❌ (into unknown accounts)
 
 ---
 
-### 10.2 The VANTA Transparency Engine — System Design
+### 10.2 The SAMADHAN Transparency Engine — System Design
 
-VANTA transforms the post-complaint lifecycle from a **black box into a public glass box**. Every rupee, every contractor, every phase, every photo — permanently recorded and publicly visible.
+SAMADHAN transforms the post-complaint lifecycle from a **black box into a public glass box**. Every rupee, every contractor, every phase, every photo — permanently recorded and publicly visible.
 
 ### Core Principle
 
@@ -1858,7 +1858,7 @@ No login required to VIEW. Only officials need accounts to ACT.
 
 ### PILLAR 1 — The Verified Contractor Registry 🏗️
 
-Before any work can be assigned, a contractor must exist in VANTA's verified registry. This is not a yellow-pages listing — it is a background-checked, category-licensed database.
+Before any work can be assigned, a contractor must exist in SAMADHAN's verified registry. This is not a yellow-pages listing — it is a background-checked, category-licensed database.
 
 #### Contractor Categories (matching complaint types)
 
@@ -1875,7 +1875,7 @@ Before any work can be assigned, a contractor must exist in VANTA's verified reg
 
 ```
 ContractorProfile {
-    id                   → unique VANTA contractor ID
+    id                   → unique SAMADHAN contractor ID
     legal_name           → registered business name
     gst_number           → verified GST registration
     pan_number           → PAN (cross-checked with IT dept)
@@ -1893,14 +1893,14 @@ ContractorProfile {
     blacklist_reason     → documented reason if blacklisted
     bank_account         → verified account for fund release
     documents [ ]        → license scans, GST cert, PAN
-    registered_at        → when they joined VANTA
+    registered_at        → when they joined SAMADHAN
     verified_by          → official who verified their docs
 }
 ```
 
 #### Anti-Shell Company Checks (AI-powered)
 
-Before a new contractor is approved, VANTA's AI runs:
+Before a new contractor is approved, SAMADHAN's AI runs:
 - **GST cross-check** — GST number must match MCA21 database
 - **Director overlap detection** — Same director name across multiple registered contractors → flagged for review
 - **Address clustering** — Multiple contractors at the same address → flagged as potential shell companies
@@ -1910,7 +1910,7 @@ Before a new contractor is approved, VANTA's AI runs:
 
 ### PILLAR 2 — Mandatory Competitive Bidding (3-Quote Rule) 💰
 
-**No single contractor can ever be directly awarded a contract on VANTA.** The system enforces minimum competition based on estimated work value.
+**No single contractor can ever be directly awarded a contract on SAMADHAN.** The system enforces minimum competition based on estimated work value.
 
 #### Tender Threshold Table
 
@@ -1922,7 +1922,7 @@ Before a new contractor is approved, VANTA's AI runs:
 | ₹10 lakh – ₹1 crore | **5 quotes + public tender** | Public (7 days minimum) |
 | Above ₹1 crore | Full DPR + state-level tender | Public (30 days) |
 
-#### The Bidding Process on VANTA
+#### The Bidding Process on SAMADHAN
 
 ```
 STEP 1 — Official creates Work Order from complaint
@@ -1932,7 +1932,7 @@ STEP 1 — Official creates Work Order from complaint
          using AI market rate database
                     │
                     ▼
-STEP 2 — Tender published on VANTA Public Board
+STEP 2 — Tender published on SAMADHAN Public Board
          Visible to ALL citizens without login
          Open for minimum required duration
          Registered contractors in category notified
@@ -1975,7 +1975,7 @@ STEP 6 — Official selects contractor
                     ▼
 STEP 7 — Contract Awarded — PUBLICLY POSTED
          Visible to all citizens:
-           - Contractor name + VANTA ID
+           - Contractor name + SAMADHAN ID
            - Awarded amount
            - Timeline
            - All 3 bids (so citizens can see if L1 was chosen)
@@ -2017,14 +2017,14 @@ PHASE 0 — MOBILISATION (10% of total value)
   Contractor receives: 10% advance
   Must provide: Site readiness photo,
                 materials procurement proof,
-                site hoarding with VANTA QR code
+                site hoarding with SAMADHAN QR code
   Deadline: 3 days after contract award
 
 PHASE 1 — GROUNDWORK COMPLETE (25% of total value)
   Contractor receives: Next 25%
   Must provide: Geotagged photos (GPS must match site)
                 Field Engineer on-site inspection
-                sign-off via VANTA app
+                sign-off via SAMADHAN app
   Citizen verification: Any 3 nearby citizens can
                          scan QR code and rate "Is work
                          actually happening?"
@@ -2070,7 +2070,7 @@ STATUS: PHASE 2 IN PROGRESS
   Remaining (locked):      ₹51,675
 
   ════ CONTRACTOR ════════════════════════════════
-  VANTA Contractor ID:     VCR-JH-00847
+  SAMADHAN Contractor ID:     VCR-JH-00847
   Company:                 Sharma & Sons Civil Works
   Performance Score:       78/100
   Contracts Completed:     23  |  Defaulted: 1
@@ -2078,7 +2078,7 @@ STATUS: PHASE 2 IN PROGRESS
   ════ TIMELINE ════════════════════════════════
   [✅] Phase 0 — Mobilisation       Released ₹7,950
        Verified: 12 Aug 2026, 09:14 AM
-       Engineer: Ramesh Kumar (VANTA ID: ENG-00124)
+       Engineer: Ramesh Kumar (SAMADHAN ID: ENG-00124)
 
   [✅] Phase 1 — Groundwork          Released ₹19,875
        Verified: 14 Aug 2026, 02:30 PM
@@ -2100,7 +2100,7 @@ STATUS: PHASE 2 IN PROGRESS
 
 ### PILLAR 4 — The Public Audit Ledger 📒
 
-Every financial transaction in VANTA's civic works system is posted to a **Public Audit Ledger** — a permanent, append-only log. No entry can be edited. No entry can be deleted.
+Every financial transaction in SAMADHAN's civic works system is posted to a **Public Audit Ledger** — a permanent, append-only log. No entry can be edited. No entry can be deleted.
 
 #### What Gets Logged
 
@@ -2108,7 +2108,7 @@ Every financial transaction in VANTA's civic works system is posted to a **Publi
 Every entry contains:
   → Timestamp (to the millisecond)
   → Action type
-  → Actor (who did this, their VANTA ID)
+  → Actor (who did this, their SAMADHAN ID)
   → Amount (if financial)
   → Complaint ID
   → Work Order ID
@@ -2183,7 +2183,7 @@ Score = 0     → BLACKLISTED: Cannot bid for 3 years
 
 ```
 ╔═══════════════════════════════════════════════╗
-║  VANTA VERIFIED CONTRACTOR                    ║
+║  SAMADHAN VERIFIED CONTRACTOR                    ║
 ║  Sharma & Sons Civil Works                    ║
 ║  VCR-JH-00847  |  Category: CIVIL            ║
 ║  Tier: B  |  Jurisdiction: Ranchi District    ║
@@ -2211,7 +2211,7 @@ Score = 0     → BLACKLISTED: Cannot bid for 3 years
 CITIZEN FILES COMPLAINT
          │
          ▼
-AI ANALYSIS + ROUTING (existing VANTA engine)
+AI ANALYSIS + ROUTING (existing SAMADHAN engine)
          │
          ▼
 OFFICIAL VIEWS COMPLAINT
@@ -2267,7 +2267,7 @@ CONTRACT SIGNED (digital)
          │           ▼                            │
          │  Field Engineer dispatched             │
          │  Inspects site physically              │
-         │  Signs off on VANTA app                │
+         │  Signs off on SAMADHAN app                │
          │           │                            │
          │           ▼                            │
          │  Community notified (5 nearby          │
@@ -2309,7 +2309,7 @@ CONTRACT SIGNED (digital)
 
 ### 10.5 Public Transparency Dashboard (No Login Needed)
 
-Any citizen, journalist, RTI activist, or opposition politician can visit VANTA's public dashboard and see:
+Any citizen, journalist, RTI activist, or opposition politician can visit SAMADHAN's public dashboard and see:
 
 ### Ward-Level Finance Tracker
 ```
@@ -2366,7 +2366,7 @@ Every rupee accounted for. Click any phase to see verification photos.
 
 ### 10.5 Anti-Fraud Mechanisms Summary
 
-| Fraud Type | VANTA's Prevention | What Happens if Caught |
+| Fraud Type | SAMADHAN's Prevention | What Happens if Caught |
 |-----------|-------------------|----------------------|
 | Inflated quotation | AI market rate shown alongside every bid | Bid publicly flagged, auditor notified |
 | Single-vendor tendering | System blocks contract creation if < 3 bids | Official cannot proceed, tier above notified |
@@ -2432,12 +2432,12 @@ event_type, score_change, new_score, reason, logged_at
 
 ---
 
-### 10.7 How This Changes VANTA's Value Proposition
+### 10.7 How This Changes SAMADHAN's Value Proposition
 
-Before the Transparency Engine, VANTA was:
+Before the Transparency Engine, SAMADHAN was:
 > *"A better way to file and track complaints"*
 
-After the Transparency Engine, VANTA becomes:
+After the Transparency Engine, SAMADHAN becomes:
 > *"The only platform where citizens can watch every rupee of their tax money from the moment a complaint is filed to the moment the work is verified — and hold both officials AND contractors accountable if it disappears."*
 
 This is no longer a grievance portal. **This is a civic financial accountability operating system.**
@@ -2457,17 +2457,17 @@ The Transparency Engine dramatically strengthens every revenue stream:
 
 ### The Political Reality
 
-A Chief Minister or MLA who deploys VANTA with the Transparency Engine can say:
+A Chief Minister or MLA who deploys SAMADHAN with the Transparency Engine can say:
 
 > *"Every rupee spent on civic works in my constituency is visible to every citizen on their phone. No contractor can run away with government money. No official can give a contract to their nephew. The public ledger shows every bid, every payment, every phase — forever. Try that with any other state."*
 
-That is an election-winning statement. And it is exactly what VANTA delivers.
+That is an election-winning statement. And it is exactly what SAMADHAN delivers.
 
 ---
 
-## 11. What Makes VANTA Unique
+## 11. What Makes SAMADHAN Unique
 
-The civic tech space is crowded with complaint portals, but VANTA is the only platform that fundamentally shifts power to the citizen through verification and transparency.
+The civic tech space is crowded with complaint portals, but SAMADHAN is the only platform that fundamentally shifts power to the citizen through verification and transparency.
 
 **The 7 Genuine Differentiators:**
 1. **Citizen-Mandated Closure:** The official cannot unilaterally close a ticket; only the citizen's YES vote can mark an issue as fully resolved.
@@ -2480,7 +2480,7 @@ The civic tech space is crowded with complaint portals, but VANTA is the only pl
 
 **Comparison Table:**
 
-| Feature | CPGRAMS | Swachhata App | FixMyStreet | VANTA |
+| Feature | CPGRAMS | Swachhata App | FixMyStreet | SAMADHAN |
 |---------|---------|---------------|-------------|-------|
 | Official can close ticket unilaterally | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No |
 | Citizen verification required for closure | ❌ No | ❌ No | ❌ No | ✅ Yes |
@@ -2489,25 +2489,25 @@ The civic tech space is crowded with complaint portals, but VANTA is the only pl
 | Auto-escalates to higher authorities | ❌ No | ❌ No | ❌ No | ✅ Yes |
 
 **The Single Pitch Line:**
-*VANTA is not a grievance portal; it is an accountability operating system that forces resolution by putting the ticket closure button exclusively in the hands of the citizen.*
+*SAMADHAN is not a grievance portal; it is an accountability operating system that forces resolution by putting the ticket closure button exclusively in the hands of the citizen.*
 
 ---
 
 ## 12. Revenue Model
 
-VANTA's architecture provides massive value not just to citizens but to government administration, oversight bodies, and corporate partners. The revenue model leverages this ecosystem.
+SAMADHAN's architecture provides massive value not just to citizens but to government administration, oversight bodies, and corporate partners. The revenue model leverages this ecosystem.
 
 | Revenue Stream | Description |
 |----------------|-------------|
-| **B2G SaaS Licensing** | A core subscription model for state governments and large municipal corporations to license the VANTA platform, customized for their jurisdictions. |
+| **B2G SaaS Licensing** | A core subscription model for state governments and large municipal corporations to license the SAMADHAN platform, customized for their jurisdictions. |
 | **Implementation + AMC** | Onboarding fees for initial database seeding, custom integrations with existing state SSO portals, and an Annual Maintenance Contract for support. |
 | **Civic Data Intelligence Reports** | Monetizing the macro-analytics dashboard by offering deep-dive civic health reports, predictive infrastructure failure models, and ward-wise trend analysis to policy institutes and urban planning departments. |
 | **Corporate CSR Ward Adoption** | Corporations can sponsor or "adopt" a ward through CSR funds. The Transparency Engine tracks these funds transparently, allowing corporations to fund projects clustered by citizen complaints. |
-| **White-label Licensing** | Licensing the underlying software engine (minus the VANTA branding) to specialized civic bodies, Smart City SPVs, or international municipal organizations. |
+| **White-label Licensing** | Licensing the underlying software engine (minus the SAMADHAN branding) to specialized civic bodies, Smart City SPVs, or international municipal organizations. |
 | **MPLADS DPR Facilitation Fee** | A minor transaction or facilitation fee attached to the seamless end-to-end generation and management of Development Project Reports (DPRs) that result in authorized MPLADS expenditure. |
 
 **SIH Pitch Paragraph:**
-VANTA's financial sustainability is rooted in its ability to save state governments millions of rupees lost to contractor fraud and duplicate efforts. By adopting our B2G SaaS and AMC model, governments can dramatically reduce RTI requests and streamline their civic expenditure. The true upside lies in data intelligence and CSR integration, ensuring that as the user base scales, VANTA creates a self-sustaining ecosystem of funded, transparent local development.
+SAMADHAN's financial sustainability is rooted in its ability to save state governments millions of rupees lost to contractor fraud and duplicate efforts. By adopting our B2G SaaS and AMC model, governments can dramatically reduce RTI requests and streamline their civic expenditure. The true upside lies in data intelligence and CSR integration, ensuring that as the user base scales, SAMADHAN creates a self-sustaining ecosystem of funded, transparent local development.
 
 ---
 
@@ -2573,7 +2573,7 @@ Organized by priority. Items marked 🔴 CRITICAL will cause demo failures if no
 
 #### BUG-01 — SQLAlchemy import crash 🔴
 - **Files:** `backend/services/escalation.py`, `backend/services/routing.py`
-- **Problem:** Both files import `from sqlalchemy.orm import Session` — a relational DB ORM. VANTA uses MongoDB. This will crash the backend on startup.
+- **Problem:** Both files import `from sqlalchemy.orm import Session` — a relational DB ORM. SAMADHAN uses MongoDB. This will crash the backend on startup.
 - **Fix:** Remove the import. Replace `Session` type hint with the MongoDB session adapter from `backend/database.py`.
 
 #### BUG-02 — .env variables never loaded 🔴
@@ -2647,7 +2647,7 @@ Organized by priority. Items marked 🔴 CRITICAL will cause demo failures if no
 - These become Tier 1 responders — complaints are routed here FIRST before MLAs.
 
 #### FEAT-09 — Mobile Responsive Design
-- Judges will likely open VANTA on a phone during the presentation.
+- Judges will likely open SAMADHAN on a phone during the presentation.
 - **Action:** Add `@media` breakpoints in `index.css` for 768px (tablet) and 480px (mobile).
 - Citizen portal (filing reports, checking status) must work perfectly on mobile.
 - Official dashboards can be tablet-first with a collapsible sidebar.
@@ -2660,7 +2660,7 @@ Organized by priority. Items marked 🔴 CRITICAL will cause demo failures if no
 #### FEAT-11 — 404 Page
 - No catch-all route. Invalid URLs show a blank white screen.
 - **Action:** Add `<Route path="*" element={<NotFound />} />` in App.jsx.
-- Build `NotFound.jsx` with glitch animation matching VANTA's dark theme.
+- Build `NotFound.jsx` with glitch animation matching SAMADHAN's dark theme.
 
 ---
 
@@ -2688,7 +2688,7 @@ Organized by priority. Items marked 🔴 CRITICAL will cause demo failures if no
 
 **Argument against:** Councillors have the least accountability; many wards have inactive councillors. Routing to them first may delay escalation to someone who can actually act.
 
-**Current VANTA behavior:** Routes to MLA as Tier 1. Ward Councillor is planned but not built.
+**Current SAMADHAN behavior:** Routes to MLA as Tier 1. Ward Councillor is planned but not built.
 
 **Recommendation:** Add Ward Councillor as Tier 1A with a short deadline (48h). If no action, auto-escalates to MLA. This matches real-world governance structure.
 
@@ -2697,7 +2697,7 @@ Organized by priority. Items marked 🔴 CRITICAL will cause demo failures if no
 ### Q2 — Verification Timeout Behavior
 **Question:** If a citizen does not verify within 48 hours, should the complaint be auto-resolved or remain pending?
 
-**Current VANTA behavior:** Auto-resolves (benefit of the doubt to official).
+**Current SAMADHAN behavior:** Auto-resolves (benefit of the doubt to official).
 
 **Alternative:** Remain pending until citizen responds — creates a better incentive for officials to follow up with citizens directly.
 
@@ -2719,9 +2719,9 @@ Organized by priority. Items marked 🔴 CRITICAL will cause demo failures if no
 ---
 
 ### Q4 — MPLADS Integration Depth
-**Question:** Should VANTA just suggest MPLADS-eligible projects, or actually integrate with the MPLADS portal?
+**Question:** Should SAMADHAN just suggest MPLADS-eligible projects, or actually integrate with the MPLADS portal?
 
-MPLADS (Member of Parliament Local Area Development Scheme) gives each MP ₹5 crore/year for local development. VANTA can AI-generate project proposals based on complaint clusters, but actual fund release requires integration with the Ministry of Statistics and PI portal.
+MPLADS (Member of Parliament Local Area Development Scheme) gives each MP ₹5 crore/year for local development. SAMADHAN can AI-generate project proposals based on complaint clusters, but actual fund release requires integration with the Ministry of Statistics and PI portal.
 
 **Recommendation for SIH:** Show AI-generated DPR as a downloadable PDF; actual MPLADS portal integration is a Phase 2 feature.
 
@@ -2744,3 +2744,687 @@ MPLADS (Member of Parliament Local Area Development Scheme) gives each MP ₹5 c
 ---
 
 *Last updated: August 2026 | Team H2K | SIH25031 — Government of Jharkhand*
+
+---
+
+---
+
+# SECTION 15 — BUSINESS MODEL, CONTRACTOR PORTAL & COMPANY OPERATIONS
+
+> **Scope note:** The AI cost estimation feature (generating repair cost estimates at ticket-filing time) is noted as a future scalability idea only. It is NOT part of the MVP. The platform's core focus remains the problem statement: SIH25031 — Crowdsourced Civic Issue Reporting and Resolution System.
+
+---
+
+## 15.1 Business Model — How SAMADHAN Makes Money
+
+SAMADHAN operates on three partner relationships. Only two of them pay.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  GOVERNMENT   →  Pays SAMADHAN    →  Gets accountability platform  │
+│  CONTRACTOR   →  Pays SAMADHAN    →  Gets verified work pipeline   │
+│  CITIZEN      →  Always Free   →  Gets civic power              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### REVENUE STREAM 1 — Government SaaS License (Primary)
+
+Government pays annually per district. Each district = one licensing unit.
+
+```
+Pricing model (per district/year):
+  Tier 1 city district (pop. > 10 lakh):   ₹15 lakh/year
+  Tier 2 district (pop. 5–10 lakh):        ₹10 lakh/year
+  Tier 3 / rural district (< 5 lakh):      ₹6 lakh/year
+
+Jharkhand:
+  24 districts × avg ₹8 lakh = ₹1.92 crore ARR
+  (1 state alone, Year 1 target)
+
+Scale:
+  All India 800 districts × avg ₹8 lakh = ₹640 crore ARR potential
+```
+
+**Why the government pays:**
+- Demonstrates accountability to citizens before elections
+- Satisfies Digital India compliance requirements
+- Reduces RTI (Right to Information) load — data already public
+- Qualifies for Smart City Mission and AMRUT funding with digital grievance proof
+- Performance data justifies budget allocation for infrastructure
+
+**How to acquire the first government client (Go-to-Market):**
+```
+STEP 1 → Win SIH 2024 (Government of Jharkhand PS)
+         → Jharkhand government gives a pilot district free
+
+STEP 2 → Run 6-month pilot with measurable outcomes
+         → Track: complaints filed, resolved, false closures caught
+         → Publish district health report
+
+STEP 3 → Pilot data = sales pitch
+         → Convert pilot to paid SaaS contract (AMC)
+         → Expand to other Jharkhand districts
+
+STEP 4 → Use Jharkhand as reference to pitch other states
+         → Bihar, UP, Odisha have similar governance structures
+
+STEP 5 → White-label the platform for other states
+         → State pays SAMADHAN, launches as their own branded app
+```
+
+---
+
+### REVENUE STREAM 2 — Contractor Registration Fee (Early Revenue)
+
+Every contractor who wants to receive work orders through SAMADHAN pays an annual registration fee to be listed in the Verified Contractor Registry.
+
+```
+Tier C (small contractors, up to ₹5L contracts):  ₹3,000/year
+Tier B (medium contractors, up to ₹25L):           ₹8,000/year
+Tier A (large contractors, up to ₹1 crore):        ₹20,000/year
+
+Why contractors pay:
+  → Direct pipeline of government work orders in their dashboard
+  → No middlemen, no bribing officials to get visibility
+  → Verified badge increases their win rate
+  → One-time verification effort, renewable annually
+
+Ranchi Municipal Corp alone: ~200 registered contractors
+  200 × avg ₹8,000 = ₹16 lakh/year from one city
+```
+
+**Registration fee is non-negotiable and publicly listed.** No official can waive it in exchange for a favour. The published rate is the rate.
+
+---
+
+### REVENUE STREAM 3 — Platform Fee on Work Orders (Scalable)
+
+Once volume is established: a 1% platform facilitation fee on every work order awarded through SAMADHAN. Deducted automatically from Phase 0 payment release.
+
+```
+Example calculation:
+  Ranchi district: 500 complaints/month with work orders
+  Average work order value: ₹50,000
+  Monthly contract value via SAMADHAN: ₹2.5 crore
+  SAMADHAN 1% fee: ₹2.5 lakh/month
+  Annual from Ranchi alone: ₹30 lakh
+
+  At scale (24 districts):
+  ₹30 lakh × 24 = ₹7.2 crore/year
+
+  This grows automatically as the platform succeeds.
+  More resolved complaints = more revenue for SAMADHAN.
+  SAMADHAN's financial incentive = platform working well.
+```
+
+The platform fee is paid by the contractor, deducted before payment reaches their bank account. Citizens never pay. Government pays only the annual license.
+
+---
+
+### REVENUE STREAM 4 — Civic Data Intelligence Reports
+
+Quarterly district governance reports sold to:
+
+| Buyer | Report Content | Price |
+|-------|---------------|-------|
+| State Planning Dept | Which 20 districts need priority infrastructure spend | ₹5–15 lakh/report |
+| MPs / MLAs | Constituency civic health score vs peers | ₹1–2 lakh/quarter |
+| Smart City SPVs | Real-time complaint density for city planning | ₹10–25 lakh/year |
+| World Bank / UNDP | Governance quality research dataset | USD 50k+ grants |
+| Journalists / NGOs | Public interest rate (discounted/free) | ₹0–50,000 |
+
+Data is generated as a byproduct of the platform running. Packaging it as reports is a near-zero-cost, high-margin business.
+
+---
+
+### REVENUE STREAM 5 — White-Label Licensing (Year 3+)
+
+Other state governments buy SAMADHAN's platform and launch it under their own brand:
+- "Kerala CivicLink" powered by SAMADHAN
+- "UP Jan Suvidha" powered by SAMADHAN
+- Bangladesh, Nepal, Sri Lanka (same administrative challenges)
+
+White-label fee: ₹50–2 crore one-time setup + annual license.
+
+---
+
+### Partnership Structure Summary
+
+```
+WITH GOVERNMENT:
+  1. Sign MoU for free pilot (6 months)
+  2. SAMADHAN provides full platform + onboarding support
+  3. Government provides: official accounts, contractor data migration
+  4. After pilot: convert to paid SaaS AMC (3-year contract)
+  5. Performance KPIs written into contract
+     (if resolution rates don't improve → partial refund clause)
+
+WITH CONTRACTORS:
+  1. Government onboards contractors into the registry
+  2. Contractors register, pay annual fee, get verified
+  3. Platform fee deducted automatically from work order payments
+  4. Contractors who perform well get priority notifications
+  5. Contractors can upgrade tier to access higher-value contracts
+
+WITH CITIZENS:
+  1. Always free. No subscription. No in-app purchases.
+  2. Citizens are the quality control mechanism, not customers.
+  3. High citizen engagement = higher platform value = stronger
+     government and contractor contract negotiations.
+```
+
+---
+
+## 15.2 Contractor Portal — Full Design
+
+Contractors are a distinct user role on SAMADHAN with their own login and dashboard. This is non-negotiable for the Transparency Engine to function.
+
+**Why contractors must be on the platform:**
+Without a contractor portal, work orders are communicated via WhatsApp, phone calls, or handwritten notes. That is exactly the corruption channel SAMADHAN is designed to eliminate. Every contractor interaction — quote submission, phase completion, payment receipt — must happen inside SAMADHAN's audited system.
+
+### Contractor User Role
+
+```
+ContractorProfile {
+  company_name, gst_number, pan_number
+  login_email, login_password (hashed)
+  category[ ]         → [CIVIL, ELECTRICAL, PLUMBING, SANITATION...]
+  tier                → A / B / C
+  jurisdiction[ ]     → districts and wards they can work in
+  workforce_count     → current available workers
+  equipment_list[ ]   → JCB, roller, dumper, drilling rig etc.
+  max_active_contracts → capacity limit
+  performance_score   → 0–100
+  bank_account        → verified, for payment release
+  license_documents[ ]→ uploaded by government official
+  license_expiry      → auto-flagged 30 days before
+  status              → ACTIVE / WARNING / SUSPENDED / BLACKLISTED
+}
+```
+
+### Contractor Dashboard
+
+```
+SAMADHAN CONTRACTOR PORTAL
+Kumar Civil Works  |  VCR-JH-00847  |  Tier B  |  Ranchi District
+
+  Performance Score:  78 / 100   ████████░░
+  Active Contracts:   3   (Max capacity: 5)
+  Completed (total):  23   |  Avg Citizen Rating: 3.8★
+  Pending Payments:   ₹47,250 (Phase 3 of WO-2847)
+
+  ── NEW WORK ORDERS IN YOUR CATEGORY ──────────────────────────
+  
+  📍 WO-3041  Pothole repair, Ward 7        [SUBMIT QUOTE →]
+     Category: CIVIL | Posted: 28 min ago
+     2 other contractors have quoted
+  
+  📍 WO-3038  Drain unblocking, Ward 12     [SUBMIT QUOTE →]
+     Category: CIVIL | Posted: 2h ago
+     4 other contractors have quoted. Deadline: 6h remaining.
+  
+  ── MY ACTIVE CONTRACTS ────────────────────────────────────────
+  
+  WO-2891  Road resurfacing, Ward 3   Phase 2 of 5  [UPLOAD PHOTOS]
+           Next payment: ₹19,875 (on Phase 3 approval)
+  
+  WO-2847  Pipe repair, Station Rd    Phase 3 of 5  [UPLOAD PHOTOS]
+           Field engineer assigned. Awaiting their visit.
+  
+  WO-2801  Footpath, MG Road          Phase 5 of 5  COMPLETE ✅
+           Retention period: 67 days remaining
+           Retention payment: ₹7,950 locked until day 90
+```
+
+### What Contractors See and Can Do
+
+```
+CAN SEE:
+  → New work orders in their category and jurisdiction
+  → How many other contractors have already quoted
+  → Their own quote history and outcomes
+  → Phase-by-phase payment status
+  → Their performance score and what's affecting it
+  → Community verification results on their completed work
+  → Feedback notes from field engineers
+
+CAN DO:
+  → Submit quotes with phase-wise cost breakdown
+  → Upload geotagged, timestamped photos for each phase
+  → Mark phases as complete (triggers engineer verification)
+  → Message field engineer through the platform (no WhatsApp)
+  → Download payment receipts
+
+CANNOT DO:
+  → See other contractors' quotes before the official decides
+  → Edit a submitted quote after submission
+  → See which official will make the decision
+  → Contact the official directly through SAMADHAN
+    (all communication is via the work order thread, logged)
+```
+
+### Government Contractor Management Panel
+
+Officials at Municipal Commissioner / BDO level have a registry management panel:
+
+```
+CONTRACTOR REGISTRY — Ranchi District
+[+ ADD NEW CONTRACTOR]   [BULK IMPORT CSV]   [EXPORT REPORT]
+
+Filter: Category ▼  Tier ▼  Status ▼  Jurisdiction ▼
+
+Contractor              Category   Tier  Score  Active  Capacity  Status
+───────────────────────────────────────────────────────────────────────
+Kumar Civil Works       CIVIL      B     85/100   3      5 max   ✅ Active
+Sharma & Sons           CIVIL      B     78/100   4      5 max   ✅ Active
+City Electrical Ltd     ELEC       A     91/100   2      8 max   ✅ Active
+Ranchi Plumbing Co.     PLUMB      C     62/100   1      3 max   ⚠️ Warning
+FastBuild Infra         CIVIL      A     45/100   0      —       🚫 Suspended
+```
+
+**Workforce & Capacity Tracking:**
+- Each contractor declares: "I have 8 workers available this month"
+- System tracks: "You currently have 4 active contracts consuming ~6 workers"
+- If contractor bids for a new work order but workforce appears insufficient → FLAG shown to official
+- This prevents contractors from winning contracts they cannot physically execute
+
+---
+
+## 15.3 UI Design Principles — Simple Enough for Anyone
+
+> **Design for the most constrained user.** The person using SAMADHAN may be a daily-wage worker with a ₹5,000 JioPhone, 2G connectivity, limited literacy, and Hindi as their only language. If the app works for them, it works for everyone else.
+
+---
+
+### The 7 Non-Negotiable UI Rules
+
+#### Rule 1 — One Action Per Screen
+Every screen has exactly ONE primary action. No screen has more than 2 buttons above the fold.
+
+```
+BAD:  Home screen with 8 cards, 5 menu items, 3 banners
+GOOD: Home screen → big green "REPORT PROBLEM" button
+      Everything else is secondary, below the fold
+```
+
+#### Rule 2 — Voice First, Typing Second
+The complaint filing screen opens the microphone by default. The citizen speaks the problem. AI transcribes, translates, and categorizes. Typing is the fallback for users who prefer it.
+
+```
+Citizen speaks (Hindi):
+"नल से पानी नहीं आ रहा है स्टेशन रोड पर"
+         ↓
+AI: Category = Water Supply
+    Sub-category = No water supply
+    Location = Station Road (cross-ref GPS)
+    Description = "No water supply on Station Road"
+         ↓
+Citizen confirms: [✅ हाँ, यही समस्या है]
+```
+
+#### Rule 3 — Camera First, Text Second
+The primary input for a complaint is a photo. Everything else is auto-filled:
+- Category → Gemini Vision detects from photo
+- Location → GPS auto-tagged
+- Description → AI generates from photo + category
+
+Citizen flow: Open app → Take photo → Confirm → Done.
+
+#### Rule 4 — Status is a Colour, Not Text
+Citizens understand colours instinctively. Replace status labels with visual indicators:
+
+```
+🔴 Red dot   = No action taken / Overdue
+🟡 Yellow    = In progress
+🟢 Green     = Resolved / Verified
+⚪ Grey      = Pending community verification
+🔵 Blue      = Escalated to higher authority
+```
+
+No complex status strings like "PENDING_COMMUNITY_VERIFICATION" visible to citizens.
+
+#### Rule 5 — Works on 2G, Offline-Capable
+- File a complaint fully offline → syncs when connection returns
+- Photos compressed to max 500KB before upload
+- No heavy animations on complaint list screens
+- APK size under 20MB
+- Minimum supported: Android 8.0 (API level 26) — covers 90%+ of Indian users
+- Text-only fallback mode for extremely slow connections
+
+#### Rule 6 — No English Required
+- App detects phone language on first launch
+- Hindi by default for Jharkhand
+- All AI-generated text (categories, descriptions) output in chosen language
+- All official status updates translated automatically
+- Future: Santali, Bengali, Odia (other Jharkhand languages)
+
+#### Rule 7 — Large Tap Targets, High Contrast
+- Minimum button height: 48dp (finger-friendly)
+- Minimum font size: 16sp for body, 14sp minimum anywhere
+- Dark background with white text (already the SAMADHAN theme — excellent for outdoor/sunlight readability)
+- No gesture-only interactions — every action has a visible button
+
+---
+
+### The Ideal Citizen Filing Flow — 3 Taps
+
+```
+TAP 1  →  Open SAMADHAN
+          Home screen shows: [REPORT A PROBLEM] in large green
+
+TAP 2  →  Camera opens
+          Citizen takes photo of the problem
+
+TAP 3  →  AI shows:
+          Category detected: Water Supply
+          Location: Station Road, Ward 7 (GPS confirmed)
+          "Is this your problem?"   [✅ YES, SUBMIT]  [Edit]
+
+          Citizen taps YES
+
+───────────────────────────────────
+COMPLAINT SUBMITTED. Done.
+Complaint #C-3041 is now live.
+5 nearby citizens will be asked to verify.
+You will get an SMS when it is assigned.
+───────────────────────────────────
+
+Total time from opening the app: < 60 seconds
+Total taps required: 3
+English required: 0 words
+```
+
+---
+
+### Contractor and Official UI — Dashboard-First
+
+For officials and contractors, the experience is more data-rich but still disciplined:
+- Sidebar navigation with maximum 5 items (not 12)
+- Most important number (unresolved complaints / pending quotes) shown at top in large type
+- One-click action on each item in the queue
+- No pagination — infinite scroll with lazy load
+- Keyboard shortcuts for desktop power users
+
+---
+
+## 15.4 Company Operations — Running SAMADHAN with Zero Corruption
+
+The biggest threat to SAMADHAN is not a competitor. It is SAMADHAN itself getting corrupted — a government pressuring data removal, a contractor bribing an employee, an official manipulating scores.
+
+The company structure and operations must make corruption technically impossible or immediately visible.
+
+---
+
+### Operational Principle 1 — The Algorithm is Public
+
+How complaint criticality is scored, how escalation triggers, how contractor scores change — all published in a public technical document. Any citizen, journalist, or researcher can read it.
+
+If a score seems wrong, anyone can challenge it with the formula. No black box.
+
+---
+
+### Operational Principle 2 — Immutable Audit Log
+
+The Public Ledger (Section 10) is append-only by technical architecture. Even SAMADHAN's own engineers cannot edit or delete a past entry. The database schema enforces this.
+
+No government can pressure SAMADHAN to "remove" a complaint from history. The data cannot be changed — only a new entry can be appended (e.g., "Complaint archived by court order — original data preserved").
+
+---
+
+### Operational Principle 3 — Government Cannot Access Citizen Data
+
+Officials see:
+- Complaint counts and locations ✅
+- Verification status ✅
+- Their own accountability scores ✅
+
+Officials cannot see:
+- Which individual citizen filed a complaint ❌
+- A citizen's trust score or filing history ❌
+- Community verification votes tied to individuals ❌
+
+This prevents victimisation of vocal citizens by officials they have filed complaints against.
+
+---
+
+### Operational Principle 4 — No Single Point of Shutdown
+
+SAMADHAN's data is hosted on cloud infrastructure (Google Cloud / Firebase), not on any state government server. A state government cannot unilaterally shut down the platform or demand data deletion.
+
+If a government terminates their SaaS contract, citizens can still access their historical complaint data for 12 months (data portability guarantee in every contract).
+
+---
+
+### Operational Principle 5 — Independent Oversight Board
+
+SAMADHAN the company has an advisory board with read-only platform access:
+
+```
+SAMADHAN OVERSIGHT BOARD (proposed):
+  1 seat → Civil society org (e.g., Janaagraha, PRAJA Foundation)
+  1 seat → Journalist / RTI activist
+  1 seat → Technical expert (cybersecurity / data ethics)
+  1 seat → Academic researcher (governance / public policy)
+  1 seat → Government representative (observer, non-voting)
+
+Board publishes:
+  → Quarterly Transparency Report (platform metrics, issues flagged)
+  → Annual Algorithm Audit (verify scoring formula not gamed)
+  → Incident Reports (any manipulation attempt and SAMADHAN's response)
+```
+
+---
+
+### Operational Principle 6 — Whistleblower Channel
+
+Any official, contractor, SAMADHAN employee, or citizen can report platform manipulation anonymously.
+
+```
+Reports go to:  Independent Oversight Board (not SAMADHAN management)
+Response SLA:   72 hours acknowledgement, 30 days investigation
+Outcome:        Published in next Transparency Report
+Protection:     Whistleblower identity protected by platform encryption
+```
+
+---
+
+### Operational Principle 7 — Pricing is Non-Negotiable
+
+Contractor registration rates and government license fees are published publicly on SAMADHAN's website. No official can "arrange a discount" for a contractor they favour. No government can negotiate a deal that isn't available to all.
+
+Contracts with government include a **Most Favoured Nation clause**: if SAMADHAN ever charges a lower rate to any government, all existing contracts automatically get that rate.
+
+---
+
+### Operational Principle 8 — Revenue Aligned with Mission
+
+SAMADHAN earns more money when:
+- More complaints are filed (more citizens using platform)
+- More complaints are actually resolved (platform fee on work orders)
+- More states adopt the platform (white-label)
+
+SAMADHAN earns less money when:
+- Citizens stop using the platform (because complaints aren't resolved)
+- Contractors abandon work (platform fee lost on failed work orders)
+- Government cancels contract (because platform isn't delivering)
+
+**The financial incentives are perfectly aligned with the mission.** SAMADHAN cannot profit from a broken system. This is the structural answer to "how do we ensure the platform stays honest."
+
+---
+
+### Future Scalability Note — AI Cost Estimation
+
+The idea of generating an AI cost estimate at complaint-filing time (based on complaint photos, category, and state Schedule of Rates) is noted as a future scalability feature.
+
+**Why not for MVP:**
+- Accurate cost estimation requires granular, district-level SOR data
+- Gemini Vision estimation of repair scope from photos has error margins that could mislead citizens
+- Only contractors have the domain expertise to price accurately
+- The MVP's existing contractor quote vs AI market rate comparison (using category-level benchmarks) is sufficient for transparency
+
+**When to build it (Year 2+):**
+- Once SAMADHAN has 12+ months of historical work order data
+- Train a model on: complaint photo → contractor quote → actual cost → outcome
+- The real-world data becomes the training set for accurate estimation
+- This is the moment AI cost estimation becomes genuinely reliable
+
+---
+
+*Section 15 added: August 2026 | Team H2K | SAMADHAN v1.0*
+*Business model, contractor portal, UI principles, and company operations for SIH25031*
+
+---
+
+---
+
+# SECTION 16 — DEPLOYMENT ARCHITECTURE
+## Web · Android · iOS — One Codebase, Three Platforms
+
+---
+
+## 16.1 Platform Strategy
+
+SAMADHAN targets three platforms from day one using a single React codebase. No separate app development required.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    CITIZEN / OFFICIAL                           │
+│         Web Browser   │   Android   │   iOS                    │
+└────────────┬──────────┴──────┬──────┴────────┬─────────────────┘
+             │                 │               │
+             ▼                 ▼               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  FIREBASE HOSTING                               │
+│          React / Vite build (same code, all platforms)         │
+│          Web → direct browser                                   │
+│          Android → Capacitor wrapper → APK                     │
+│          iOS → PWA (Add to Home Screen for SIH demo)           │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │ HTTPS API calls
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  GOOGLE CLOUD RUN                               │
+│          FastAPI backend — Docker container                     │
+│          All 5 engines running here                             │
+│          WebSocket support (HTTP/2)                             │
+│          Auto-scales to zero when idle → ₹0 when not used      │
+│          Free tier: 2 million requests/month                    │
+└──────┬──────────────────┬───────────────────┬───────────────────┘
+       │                  │                   │
+       ▼                  ▼                   ▼
+┌────────────┐   ┌─────────────────┐   ┌─────────────────┐
+│  MongoDB   │   │   Gemini API    │   │ Firebase Storage │
+│   Atlas    │   │ (AI engine)     │   │ (photos/docs)   │
+│  Free 512M │   │  Google Cloud   │   │   Free 5GB      │
+└────────────┘   └─────────────────┘   └─────────────────┘
+                           │
+┌─────────────────────────────────────────────────────────────────┐
+│                  FIREBASE SERVICES                              │
+│  Auth (Phone OTP) │ FCM (push notifications) │ Analytics       │
+│  Free: 10,000 SMS/month                                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 16.2 Why This Stack
+
+| Decision | Choice | Reason |
+|----------|--------|--------|
+| Frontend hosting | Firebase Hosting | Free, CDN-backed, instant deploy |
+| Backend hosting | Google Cloud Run | Supports long-running processes (escalation engine), WebSockets, Python, scales to zero |
+| Why NOT Firebase Functions | — | Functions timeout at 9 minutes — escalation sweep loop runs indefinitely |
+| Phone OTP auth | Firebase Auth | Built-in, 10,000 SMS/month free, replaces custom OTP code |
+| Photo storage | Firebase Storage | Direct upload from mobile, free 5GB |
+| Push notifications | FCM | Free, works on both Android and iOS |
+| Database | MongoDB Atlas | Existing codebase, free 512MB, no migration needed for MVP |
+| Android app | Capacitor | Wraps existing React app — no React Native rewrite |
+| iOS for demo | PWA | No Apple Developer account needed for SIH demo |
+
+---
+
+## 16.3 Android + iOS — No Separate Codebase
+
+Capacitor converts the existing React/Vite app into a native Android APK:
+
+```
+npm run build            → generates dist/ folder
+npx cap sync             → copies dist/ into Android project
+Android Studio build     → generates debug APK
+Share APK directly       → sideload on any Android phone
+                           (no Play Store needed for SIH demo)
+```
+
+**Native features added via Capacitor plugins:**
+- `@capacitor/camera` — better than browser camera for complaint photos
+- `@capacitor/geolocation` — more accurate GPS than browser API
+- `@capacitor/push-notifications` — FCM integration for real-time alerts
+- `@capacitor/share` — share complaint links (drives the 5-person verification user acquisition)
+
+**iOS strategy for SIH demo:**
+Add PWA manifest to React app → judges can tap "Add to Home Screen" on iPhone → behaves like a native app. No App Store, no Apple Developer account required.
+
+---
+
+## 16.4 Deployment Cost for SIH — ₹0
+
+| Service | Free Tier | SAMADHAN Usage |
+|---------|-----------|-------------|
+| Firebase Hosting | 10GB storage, 360MB/day | React build ~5MB total |
+| Firebase Auth (SMS OTP) | 10,000 SMS/month | Well within demo usage |
+| Firebase Storage | 5GB | Complaint photos |
+| Firebase Cloud Messaging | Unlimited | Push notifications |
+| Google Cloud Run | 2M requests/month | Backend API calls |
+| MongoDB Atlas | 512MB | Complaints, users, officials |
+| Gemini API | Free tier | AI classification |
+| **Total** | **₹0/month** | **For SIH demo and early pilot** |
+
+---
+
+## 16.5 Deployment Phases
+
+```
+PHASE 1 — Backend live on Cloud Run
+  → Fix 4 critical bugs
+  → Write Dockerfile for FastAPI app
+  → Deploy to Cloud Run → get HTTPS URL
+
+PHASE 2 — Firebase Auth
+  → Replace custom OTP with Firebase Phone Auth
+  → More reliable, no SMS infrastructure to maintain
+
+PHASE 3 — Frontend on Firebase Hosting
+  → npm run build → firebase deploy
+  → Live at https://samadhan-h2k.web.app
+
+PHASE 4 — Android APK via Capacitor
+  → 2-3 hours of setup
+  → Debug APK shareable immediately for testing
+
+PHASE 5 — Firebase Storage + FCM
+  → Wire photo upload for complaints
+  → Push notifications for citizen and official alerts
+```
+
+---
+
+## 16.6 Decisions Log (Conversations → Architecture)
+
+The following design decisions were made during team discussions and are recorded here for reference:
+
+| Decision | What Was Decided | Reason |
+|----------|-----------------|--------|
+| AI cost estimation at filing | NOT for MVP — future scalability | Only contractors accurately know costs; AI estimation would mislead citizens until we have real training data |
+| Contractor portal | YES — must be on platform | Without digital contractor login, work order communication falls back to WhatsApp and phone calls, recreating the corruption channel |
+| Firebase vs pure custom backend | Hybrid: Firebase for auth/storage/FCM + Cloud Run for FastAPI | Firebase cannot run long-running processes (escalation engine) |
+| iOS strategy | PWA for SIH demo, Capacitor native later | Avoids Apple Developer account cost and App Store review for competition |
+| Database | Keep MongoDB Atlas, not migrate to Firestore | No migration effort needed for MVP; existing codebase works |
+| Community 5-person verification | In design, simplified for MVP | Full GPS-enforced verification is post-MVP; MVP uses simple upvote threshold |
+| Aadhaar verification | Post-MVP | UIDAI API integration requires regulatory approval; phone OTP sufficient for SIH |
+| Ticket limits | Level 0: 2/month, Level 1: 4/month, Level 2: 10/month | Per month, not per day. Unlimited upvotes for all levels |
+
+---
+
+*Section 16 added: August 2026 | Team H2K | SAMADHAN v1.0*

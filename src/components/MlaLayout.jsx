@@ -13,7 +13,7 @@ const MlaLayout = () => {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          VANTA GOV
+          SAMADHAN GOV
         </div>
         
         <div 
@@ -55,7 +55,7 @@ const MlaLayout = () => {
         {/* Topbar */}
         <header className="topbar" style={{ backgroundColor: '#08080E', borderBottom: '1px solid #1E1E35' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', letterSpacing: '-0.02em', fontFamily: 'Space Grotesk' }}>VANTA</span>
+            <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', letterSpacing: '-0.02em', fontFamily: 'Space Grotesk' }}>SAMADHAN</span>
           </div>
           <div className="topbar-actions">
             <div style={{ position: 'relative', cursor: 'pointer' }}>

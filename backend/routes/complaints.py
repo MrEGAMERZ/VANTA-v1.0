@@ -1,7 +1,7 @@
 import random
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Request
-from sqlalchemy.orm import Session
+from database import Session
 from datetime import datetime, timedelta
 from database import get_db
 from models.models import Complaint, Citizen, Official, Upvote

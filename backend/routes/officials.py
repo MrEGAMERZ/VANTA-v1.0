@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from database import Session
 from database import get_db
 from models.models import Official
 from schemas.schemas import OfficialResponse

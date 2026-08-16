@@ -12,7 +12,7 @@ const NotificationBell = () => {
 
   useEffect(() => {
     // Load existing notifications from localStorage
-    const saved = localStorage.getItem('vanta_notifications');
+    const saved = localStorage.getItem('samadhan_notifications');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -66,7 +66,7 @@ const NotificationBell = () => {
 
           setNotifications(prev => {
             const updated = [newNotification, ...prev].slice(0, 20); // Keep last 20
-            localStorage.setItem('vanta_notifications', JSON.stringify(updated));
+            localStorage.setItem('samadhan_notifications', JSON.stringify(updated));
             setUnreadCount(updated.filter(n => !n.read).length);
             return updated;
           });
@@ -89,7 +89,7 @@ const NotificationBell = () => {
       // Mark all as read when opening
       setNotifications(prev => {
         const updated = prev.map(n => ({ ...n, read: true }));
-        localStorage.setItem('vanta_notifications', JSON.stringify(updated));
+        localStorage.setItem('samadhan_notifications', JSON.stringify(updated));
         setUnreadCount(0);
         return updated;
       });
@@ -106,7 +106,7 @@ const NotificationBell = () => {
   const clearNotifications = () => {
     setNotifications([]);
     setUnreadCount(0);
-    localStorage.removeItem('vanta_notifications');
+    localStorage.removeItem('samadhan_notifications');
   };
 
   const getIcon = (type) => {

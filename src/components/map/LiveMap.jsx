@@ -40,8 +40,8 @@ const createCustomIcon = (criticality, stars) => {
   if (criticality === 'CRITICAL') animationClass = 'pulse-critical';
 
   const html = `
-    <div class="vanta-marker" style="width: ${size}px; height: ${size}px; color: ${color};">
-      <div class="vanta-marker-inner ${animationClass}" style="background-color: ${color}"></div>
+    <div class="samadhan-marker" style="width: ${size}px; height: ${size}px; color: ${color};">
+      <div class="samadhan-marker-inner ${animationClass}" style="background-color: ${color}"></div>
     </div>
   `;
 
@@ -150,7 +150,7 @@ const LiveMap = ({ onMarkerClick }) => {
               }
             }}
           >
-            <Popup className="vanta-popup">
+            <Popup className="samadhan-popup">
               <h3 className="popup-title">{complaint.title}</h3>
               <div className="popup-meta">ID: {complaint.id}</div>
               <div className="popup-meta" style={{ color: CRITICALITY_COLORS[complaint.criticality] }}>
