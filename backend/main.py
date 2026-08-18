@@ -21,7 +21,7 @@ from database import engine, Base, SessionLocal
 from seed_data import seed_db
 
 # Import routers
-from routes import auth, complaints, officials, map, resolution, escalation, projects, upload, transparency
+from routes import auth, complaints, officials, map, resolution, escalation, projects, upload, transparency, tenders
 
 # Initialize tables & seed data
 Base.metadata.create_all(bind=engine)
@@ -52,6 +52,7 @@ app.include_router(escalation.router)
 app.include_router(projects.router)
 app.include_router(upload.router)
 app.include_router(transparency.router)
+app.include_router(tenders.router)
 
 from fastapi.staticfiles import StaticFiles
 uploads_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public", "uploads")

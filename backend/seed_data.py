@@ -122,6 +122,21 @@ def seed_db():
         db.add(c)
     db.commit()
 
+    # 2.5 Seed Contractors
+    from models.models import Contractor
+    contractors = [
+        Contractor(id=str(uuid.uuid4()), company_name="VoltMax Power Solutions", specialty="Electrical", rating=4.8, is_government_approved=True),
+        Contractor(id=str(uuid.uuid4()), company_name="Bengaluru Grid Co.", specialty="Electrical", rating=4.2, is_government_approved=True),
+        Contractor(id=str(uuid.uuid4()), company_name="South City Electrics", specialty="Electrical", rating=3.9, is_government_approved=True),
+        Contractor(id=str(uuid.uuid4()), company_name="Apex Wiring & Cables", specialty="Electrical", rating=4.5, is_government_approved=True),
+        Contractor(id=str(uuid.uuid4()), company_name="National Power Infra", specialty="Electrical", rating=4.9, is_government_approved=True),
+        Contractor(id=str(uuid.uuid4()), company_name="Rapid Roads Ltd.", specialty="Roads", rating=4.7, is_government_approved=True),
+        Contractor(id=str(uuid.uuid4()), company_name="ClearWater Systems", specialty="Water", rating=4.4, is_government_approved=True),
+    ]
+    for c in contractors:
+        db.add(c)
+    db.commit()
+
     # 3. Seed complaints
     categories = ["Water", "Roads", "Electrical", "Sanitation", "Health", "Education", "Infrastructure"]
     criticalities = [

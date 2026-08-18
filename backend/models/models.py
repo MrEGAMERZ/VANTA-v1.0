@@ -169,3 +169,37 @@ class TransparencyLedger(Base):
     last_updated = Column(DateTime, default=func.now())
 
     project = relationship("DevelopmentProject", back_populates="ledgers")
+
+class Contractor(Base):
+    __tablename__ = "contractors"
+    
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_name = Column(String)
+    specialty = Column(String)
+    rating = Column(Float, default=0.0)
+    is_government_approved = Column(Boolean, default=True)
+
+class TenderInvitation(Base):
+    __tablename__ = "tender_invitations"
+    
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    project_id = Column(String, ForeignKey("development_projects.id"))
+    invited_by_official_id = Column(String, ForeignKey("officials.id"))
+    contractor_id = Column(String, ForeignKey("contractors.id"))
+    status = Column(String, default="PENDING") # PENDING, BID_SUBMITTED, REJECTED
+    invited_at = Column(DateTime, default=func.now())
+
+class TenderBid(Base):
+    __tablename__ = "tender_bids"
+    
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    invitation_id = Column(String, ForeignKey("tender_invitations.id"))
+    contractor_id = Column(String, ForeignKey("contractors.id"))
+    project_id = Column(String, ForeignKey("development_projects.id"))
+    bid_amount = Column(Float)
+    estimated_days = Column(Integer)
+    site_visit_completed = Column(Boolean, default=False)
+    ai_score = Column(Float, nullable=True) # AI analysis score
+    ai_reasoning = Column(Text, nullable=True)
+    is_awarded = Column(Boolean, default=False)
+    submitted_at = Column(DateTime, default=func.now())

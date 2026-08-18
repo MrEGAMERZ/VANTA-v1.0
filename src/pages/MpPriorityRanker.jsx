@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Target, FileDown, RefreshCw, TrendingUp, Users, MapPin, Zap, Check } from 'lucide-react';
+import { Target, FileDown, RefreshCw, TrendingUp, Users, MapPin, Zap, Check, FileText } from 'lucide-react';
 import { api } from '../services/api';
 import '../pages/Dashboard.css';
 import { useToast } from '../components/Toast';
+import TenderModal from '../components/TenderModal';
 
 const MpPriorityRanker = () => {
   const { showToast } = useToast();
@@ -10,6 +11,7 @@ const MpPriorityRanker = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState({});
+  const [manageTenderProject, setManageTenderProject] = useState(null);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -191,9 +193,13 @@ const MpPriorityRanker = () => {
                   </div>
                   <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                     {isApproved ? (
-                      <span className="badge badge-resolved" style={{ padding: '0.35rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <Check size={12} /> DPR AUTHORIZED
-                      </span>
+                      <button 
+                        className="btn-primary" 
+                        onClick={() => setManageTenderProject(project)}
+                        style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                      >
+                        <FileText size={14} /> MANAGE TENDER
+                      </button>
                     ) : (
                       <button 
                         className="btn-primary" 
@@ -259,6 +265,17 @@ const MpPriorityRanker = () => {
             );
           })}
         </div>
+      )}
+      
+      {manageTenderProject && (
+        <TenderModal 
+          project={manageTenderProject} 
+          onClose={() => setManageTenderProject(null)} 
+          onAwarded={() => {
+            setManageTenderProject(null);
+            fetchProjects(); // Refresh if we need to show changes
+          }} 
+        />
       )}
     </div>
   );
