@@ -21,7 +21,7 @@ const MpLayout = () => {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand">
-          <span>VANTA</span>
+          <span>SAMADHAN</span>
         </div>
         
         <div className="profile-snippet" onClick={() => navigate('/official/profile')} style={{ cursor: 'pointer' }}>

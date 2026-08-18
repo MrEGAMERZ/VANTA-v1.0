@@ -333,3 +333,9 @@
   color: #555570;
   margin-top: 1rem;
 }
+
+@media (max-width: 768px) {
+  .cr-grid {
+    grid-template-columns: 1fr;
+  }
+}

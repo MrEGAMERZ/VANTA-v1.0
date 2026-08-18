@@ -81,6 +81,7 @@ class Complaint(Base):
     near_dam = Column(Boolean, default=False)
     ai_photo_analysis = Column(JSON, nullable=True)
     is_fake_flagged = Column(Boolean, default=False)
+    risk_flags = Column(JSON, default=list)
     
     # Resolution fields
     resolution_status = Column(String, nullable=True)  # PENDING/TEMP_FIX/VERIFIED/FALSE_CLOSURE
@@ -148,3 +149,23 @@ class DevelopmentProject(Base):
     rank = Column(Integer)
     approved = Column(Boolean, default=False)
     created_at = Column(DateTime, default=func.now())
+
+    ledgers = relationship("TransparencyLedger", back_populates="project")
+
+class TransparencyLedger(Base):
+    """
+    Transparency Engine Model: Tracks public procurement, bids, milestone completions, 
+    and phase-wise payments for Development Projects.
+    """
+    __tablename__ = "transparency_ledgers"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    project_id = Column(String, ForeignKey("development_projects.id"))
+    contractor_name = Column(String)
+    bid_amount = Column(Float)
+    funds_released = Column(Float, default=0.0)
+    milestone_status = Column(String, default="CONTRACT_AWARDED") # CONTRACT_AWARDED, PHASE_1, PHASE_2, COMPLETED
+    phase_wise_payments = Column(JSON, default=list) # Array of payment dicts
+    last_updated = Column(DateTime, default=func.now())
+
+    project = relationship("DevelopmentProject", back_populates="ledgers")

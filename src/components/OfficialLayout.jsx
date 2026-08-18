@@ -31,7 +31,7 @@ const OfficialLayout = () => {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand">
-          <span>VANTA</span>
+          <span>SAMADHAN</span>
         </div>
 
         <div className="profile-snippet" onClick={() => navigate('/official/profile')} style={{ cursor: 'pointer' }}>
@@ -88,7 +88,7 @@ const OfficialLayout = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <span style={{ fontSize: '1.15rem', fontFamily: 'Space Grotesk', fontWeight: 700, color: 'white', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <ShieldAlert size={20} color="#6366F1" />
-              VANTA Governance Suite
+              SAMADHAN Governance Suite
             </span>
           </div>
           <div className="topbar-actions">

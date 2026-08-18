@@ -1,3 +1,9 @@
+/**
+ * @file CitizenHome.jsx
+ * @description Landing dashboard for the Citizen Portal.
+ * Displays high-level personal statistics, recent issue statuses, 
+ * and community-driven verification actions.
+ */
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
@@ -44,7 +50,7 @@ const CitizenHome = () => {
     return (
       <div className="home-loading">
         <div className="spinner"></div>
-        <p>SECURE LOGON... RETRIEVING CITIZEN INTEL</p>
+        <p>Loading your dashboard...</p>
       </div>
     );
   }
@@ -64,7 +70,7 @@ const CitizenHome = () => {
       {/* Welcome Banner */}
       <header className="welcome-banner">
         <div className="welcome-info">
-          <span className="clearance-badge">LEVEL 1 CITIZEN CLEARANCE</span>
+          <span className="clearance-badge">Citizen Dashboard</span>
           <h1>Welcome, {citizen?.name || citizenName}</h1>
           <p className="location-detail">
             <MapPin size={16} className="text-accent" />
@@ -111,18 +117,18 @@ const CitizenHome = () => {
 
           {/* Quick Actions */}
           <section className="quick-actions-section">
-            <h2>Command Operations</h2>
+            <h2>Quick Actions</h2>
             <div className="action-cards">
               <div className="action-card highlight" onClick={() => navigate('/citizen/file-report')}>
                 <PlusCircle size={32} />
                 <h3>File New Report</h3>
                 <p>Submit a new localized grievance with AI-assisted voice translation & tagging.</p>
-                <span className="action-btn">Launch Report Terminal <ChevronRight size={14} /></span>
+                <span className="action-btn">Report Issue <ChevronRight size={14} /></span>
               </div>
 
               <div className="action-card" onClick={() => navigate('/citizen/issues')}>
                 <MessageSquare size={32} />
-                <h3>Grievance Database</h3>
+                <h3>Community Issues</h3>
                 <p>Inspect existing reports in your ward, upvote issues, and verify official resolutions.</p>
                 <span className="action-btn">Explore Database <ChevronRight size={14} /></span>
               </div>
@@ -166,7 +172,7 @@ const CitizenHome = () => {
           <div className="intel-card">
             <div className="intel-header">
               <ShieldAlert size={20} color="#6366F1" />
-              <h3>VANTA SECURITY BRIEF</h3>
+              <h3>HOW SAMADHAN WORKS</h3>
             </div>
             <p>Every grievance filed is categorized in real-time by the Gemini AI core. Higher severity issues route automatically to ward MLAs or District Collectors.</p>
             <ul className="intel-rules">

@@ -1,6 +1,17 @@
+/**
+ * @file LiveMap.jsx
+ * @description React-Leaflet Map Component with real-time WebSocket integration.
+ * Plots civic complaints with custom color-coded markers based on criticality.
+ * Falls back to local simulation if the WebSocket connection fails.
+ */
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
+
+// Make L available globally for leaflet-heat to attach itself
+window.L = L;
+import './leaflet-heat.js';
+
 import 'leaflet/dist/leaflet.css';
 import './LiveMap.css';
 import { api, WS_URL } from '../../services/api';
@@ -54,6 +65,40 @@ const createCustomIcon = (criticality, stars) => {
   });
 };
 
+const HeatmapLayer = ({ points }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (!points || points.length === 0) return;
+    const heat = L.heatLayer(points, {
+      radius: 30,
+      blur: 20,
+      maxZoom: 16,
+      gradient: {
+        0.2: '#00C896', // ROUTINE
+        0.4: '#4A90D9', // MODERATE
+        0.6: '#FFD700', // ELEVATED
+        0.8: '#FF8C00', // HIGH
+        1.0: '#FF3B3B'  // CRITICAL / CATASTROPHIC
+      }
+    }).addTo(map);
+
+    return () => {
+      map.removeLayer(heat);
+    };
+  }, [map, points]);
+  return null;
+};
+
+// Component to handle zoom events
+const MapEventLogic = ({ setZoomLevel }) => {
+  useMapEvents({
+    zoomend: (e) => {
+      setZoomLevel(e.target.getZoom());
+    },
+  });
+  return null;
+};
+
 const initialComplaints = [
   { id: 'V-101', lat: 12.9716, lng: 77.5946, criticality: 'CRITICAL', stars: 5, title: 'Main Water Line Burst', ward: 'Ward 7' },
   { id: 'V-102', lat: 12.9650, lng: 77.5900, criticality: 'HIGH', stars: 4, title: 'Streetlight Outage', ward: 'Ward 8' },
@@ -64,6 +109,8 @@ const initialComplaints = [
 
 const LiveMap = ({ onMarkerClick }) => {
   const [complaints, setComplaints] = useState([]);
+  const [zoomLevel, setZoomLevel] = useState(13); // Default zoom
+
 
   const loadPins = async () => {
     try {
@@ -126,18 +173,37 @@ const LiveMap = ({ onMarkerClick }) => {
 
   return (
     <div className="map-container">
+      {/* Zoom Indicator Overlay */}
+      <div className="zoom-indicator">
+        {zoomLevel < 15 ? "🔥 HEATMAP MODE: Zoom in to view individual pins" : "📍 PIN MODE: Tap pins to view details"}
+      </div>
+
       <MapContainer 
         center={[12.9716, 77.5946]} 
         zoom={13} 
         style={{ height: '100%', width: '100%', background: '#0F0F1A' }}
         zoomControl={false}
       >
+        <MapEventLogic setZoomLevel={setZoomLevel} />
+        
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
         />
         
-        {complaints.map((complaint, idx) => (
+        {/* Render Heatmap if zoomed out (< 15) */}
+        {zoomLevel < 15 && (
+          <HeatmapLayer 
+            points={complaints.map(c => {
+              // Intensity based on criticality / stars (1 to 5) -> scale to 0.1 - 1.0
+              const intensity = (c.stars * 2) / 10;
+              return [c.lat, c.lng, intensity];
+            })} 
+          />
+        )}
+
+        {/* Render Pins if zoomed in (>= 15) */}
+        {zoomLevel >= 15 && complaints.map((complaint, idx) => (
           <Marker 
             key={`${complaint.id}-${idx}`} // Force re-render on update
             position={[complaint.lat, complaint.lng]}

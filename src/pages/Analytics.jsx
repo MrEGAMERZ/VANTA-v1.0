@@ -1,3 +1,9 @@
+/**
+ * @file Analytics.jsx
+ * @description Displays AI-recommended development projects to Officials.
+ * Provides the workflow for officials to authorize Detailed Project Reports (DPRs) 
+ * based on clustered civic complaints and their estimated financial impact.
+ */
 import React, { useState, useEffect } from 'react';
 import { FileText, Zap, MapPin, Cpu, AlertCircle } from 'lucide-react';
 import './Analytics.css';

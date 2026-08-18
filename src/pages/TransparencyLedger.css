@@ -1,0 +1,166 @@
+.ledger-container {
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ledger-header {
+  margin-bottom: 2rem;
+}
+
+.ledger-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.ledger-header p {
+  color: #8888AA;
+  font-size: 0.95rem;
+}
+
+.ledger-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ledger-card {
+  background: #111118;
+  border: 1px solid #1E1E35;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.ledger-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #1E1E35;
+  padding-bottom: 1rem;
+}
+
+.ledger-project-info h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+}
+
+.ledger-project-info .ward-badge {
+  display: inline-block;
+  background: rgba(108, 99, 255, 0.1);
+  color: #6C63FF;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.ledger-status-badge {
+  background: rgba(0, 200, 150, 0.1);
+  color: #00C896;
+  border: 1px solid rgba(0, 200, 150, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.ledger-financials {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.fin-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fin-label {
+  font-size: 0.75rem;
+  color: #8888AA;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.fin-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.fin-value.accent {
+  color: #6C63FF;
+}
+
+.ledger-phases {
+  background: #0B0B13;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.ledger-phases h3 {
+  font-size: 0.85rem;
+  color: #8888AA;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 1rem 0;
+}
+
+.phase-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.phase-table th, .phase-table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #1E1E35;
+  font-size: 0.85rem;
+}
+
+.phase-table th {
+  color: #8888AA;
+  font-weight: 500;
+}
+
+.phase-table td {
+  color: #E2E8F0;
+}
+
+.phase-table tr:last-child td {
+  border-bottom: none;
+}
+
+.status-paid {
+  color: #00C896;
+  font-weight: 600;
+}
+
+.status-pending {
+  color: #FFD700;
+  font-weight: 600;
+}
+
+.ledger-loading, .ledger-empty {
+  text-align: center;
+  padding: 5rem 0;
+  color: #8888AA;
+  font-family: 'Space Grotesk', sans-serif;
+}

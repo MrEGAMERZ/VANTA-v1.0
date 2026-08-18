@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, Folder, PlusSquare, BarChart2,
-  Settings, HelpCircle, Shield, LogOut, UserCircle
+  Settings, HelpCircle, Shield, LogOut, UserCircle, Database
 } from 'lucide-react';
 import NotificationBell from './NotificationBell';
 import '../pages/Dashboard.css';
@@ -33,7 +33,7 @@ const CitizenLayout = () => {
       <aside className="sidebar" style={{ backgroundColor: '#0B0B13', borderRight: '1px solid #161625' }}>
         <div className="brand" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Shield size={24} color="#6C63FF" />
-          <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', letterSpacing: '-0.02em', fontFamily: 'Space Grotesk' }}>VANTA</span>
+          <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', letterSpacing: '-0.02em', fontFamily: 'Space Grotesk' }}>SAMADHAN</span>
         </div>
         
         <nav className="nav-menu" style={{ marginTop: '1rem', flex: 1 }}>
@@ -52,6 +52,10 @@ const CitizenLayout = () => {
           <NavLink to="/citizen/analytics" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
             <BarChart2 size={18} />
             Analytics
+          </NavLink>
+          <NavLink to="/citizen/ledger" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+            <Database size={18} />
+            Public Ledger
           </NavLink>
         </nav>
 
@@ -87,7 +91,7 @@ const CitizenLayout = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <span style={{ fontSize: '1.15rem', fontFamily: 'Space Grotesk', fontWeight: 700, color: 'white', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Shield size={20} color="#6C63FF" />
-              VANTA Citizen Portal
+              SAMADHAN Citizen Portal
             </span>
           </div>
           <div className="topbar-actions">

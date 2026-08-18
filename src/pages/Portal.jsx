@@ -35,7 +35,7 @@ const Portal = () => {
 
       <div style={{ textAlign: 'center' }}>
         <h1 style={{ fontSize: '2.5rem', fontWeight: 700, margin: '0 0 0.5rem 0', letterSpacing: '-0.05em' }}>
-          CivicPulse
+          SAMADHAN
         </h1>
         <p style={{ fontSize: '0.75rem', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
           Engineered in the dark. Built to last.

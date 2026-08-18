@@ -1,3 +1,10 @@
+/**
+ * @file Constituency.jsx
+ * @description Ward-level Command Center for Officials.
+ * Integrates the Leaflet LiveMap to visualize geographically distributed 
+ * complaints. Allows officials to force administrative actions (escalation) 
+ * on selected incidents.
+ */
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, X, Play, MapPin, Cpu, ShieldAlert } from 'lucide-react';
 import './Constituency.css';

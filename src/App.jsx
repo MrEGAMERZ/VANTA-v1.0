@@ -23,6 +23,7 @@ import CitizenProfile from './pages/CitizenProfile';
 import OfficialProfile from './pages/OfficialProfile';
 import CitizenHome from './pages/CitizenHome';
 import CitizenAnalytics from './pages/CitizenAnalytics';
+import TransparencyLedger from './pages/TransparencyLedger';
 import NotFound from './pages/NotFound';
 import { AuthGuard } from './services/authGuard';
 import './App.css';
@@ -56,6 +57,7 @@ function App() {
             <Route path="/citizen/profile" element={<CitizenProfile />} />
             <Route path="/citizen/home" element={<CitizenHome />} />
             <Route path="/citizen/analytics" element={<CitizenAnalytics />} />
+            <Route path="/citizen/ledger" element={<TransparencyLedger />} />
           </Route>
         </Route>
 

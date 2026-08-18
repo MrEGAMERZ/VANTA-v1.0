@@ -9,3 +9,4 @@ python-jose[cryptography]
 passlib[bcrypt]
 bcrypt
 apscheduler
+python-multipart

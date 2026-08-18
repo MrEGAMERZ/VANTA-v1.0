@@ -28,7 +28,15 @@ const authFetch = async (url, options = {}) => {
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  return fetch(url, { ...options, headers });
+  const response = await fetch(url, { ...options, headers });
+  
+  if (response.status === 401) {
+    localStorage.removeItem('user_token');
+    localStorage.removeItem('user_role');
+    window.location.href = '/';
+  }
+  
+  return response;
 };
 
 export const api = {

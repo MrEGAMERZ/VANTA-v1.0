@@ -1,26 +1,49 @@
+"""
+Complaints Router Module
+========================
+Handles the core civic grievance reporting pipeline.
+- `POST /`: Submits a complaint, triggers AI categorization, and initiates the 5-Citizen Verification loop.
+- `POST /{id}/upvote`: Allows citizens to upvote/verify issues. Upon reaching 5 upvotes, the grievance is auto-routed to the correct official's queue.
+"""
+
 import random
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Request
-from sqlalchemy.orm import Session
+from database import Session
 from datetime import datetime, timedelta
 from database import get_db
 from models.models import Complaint, Citizen, Official, Upvote
 from schemas.schemas import ComplaintCreate, ComplaintResponse, UpvoteRequest
-from services.ai_engine import analyze_complaint_ai, calculate_stars_rating
+from services.ai_engine import analyze_complaint_ai, calculate_stars_rating, detect_duplicate
 from services.routing import route_complaint_to_official
 
 router = APIRouter(prefix="/api/complaints", tags=["complaints"])
 
 @router.post("", response_model=ComplaintResponse)
 async def create_complaint(req: ComplaintCreate, request: Request, db: Session = Depends(get_db)):
-    # 1. Run AI analysis (translation, category, sub_category, criticality score & level)
-    ai_data = analyze_complaint_ai(req.text_content)
+    # 1. Run AI analysis (translation, category, sub_category, criticality score & level, vision)
+    ai_data = analyze_complaint_ai(req.text_content, req.photo_urls)
     
     # Extract details
-    category = ai_data.get("category", "Roads")
-    sub_category = ai_data.get("sub_category", "Potholes")
-    criticality_level = ai_data.get("level", "ROUTINE")
-    criticality_score = ai_data.get("score", 30)
+    category = ai_data.get("category", "Other")
+    sub_category = ai_data.get("sub_category", "General")
+    criticality_level = ai_data.get("criticality_level", "ROUTINE")
+    criticality_score = ai_data.get("criticality_score", 30)
+    risk_flags = ai_data.get("risk_flags", [])
+    vision_verified = ai_data.get("vision_verified", False)
+    
+    # If photos were provided but AI says they don't match the text, flag as potentially fake
+    is_fake_flagged = False
+    if req.photo_urls and not vision_verified:
+        is_fake_flagged = True
+        
+    # 1.5 Duplicate detection
+    recent_complaints = db.query(Complaint).filter(
+        Complaint.ward == (req.ward or "Ward 7"),
+        Complaint.filed_at >= datetime.utcnow() - timedelta(days=7)
+    ).all()
+    recent_dicts = [{"id": c.id, "text": c.text_content} for c in recent_complaints]
+    duplicate_of_id = detect_duplicate(req.text_content, recent_dicts)
     
     # 2. Calculate star priority rating
     star_rating = calculate_stars_rating(criticality_score)
@@ -44,33 +67,26 @@ async def create_complaint(req: ComplaintCreate, request: Request, db: Session =
         criticality_score=criticality_score,
         star_rating=star_rating,
         status="FILED",
-        is_overdue=False
+        is_overdue=False,
+        ai_photo_analysis={"vision_verified": vision_verified, "risk_flags": risk_flags},
+        is_fake_flagged=is_fake_flagged,
+        is_duplicate_of=duplicate_of_id
     )
     
-    # 4. Route to official
-    official_id, tier = route_complaint_to_official(new_complaint, db)
-    new_complaint.assigned_to = official_id
-    new_complaint.assigned_tier = tier
-    new_complaint.assigned_at = datetime.utcnow()
-    new_complaint.status = "ASSIGNED"
-    
-    # Set deadline based on criticality
-    days_to_add = 30
+    official_id = None
+    # 4. 5-Citizen Verification Logic
+    # Complaint stays in PENDING_COMMUNITY until 5 upvotes are reached,
+    # unless it is an extreme emergency (CATASTROPHIC).
     if criticality_level == "CATASTROPHIC":
-        days_to_add = 0.04  # 1 hour response window
-    elif criticality_level == "CRITICAL":
-        days_to_add = 0.08  # 2 hours
-    elif criticality_level == "HIGH":
-        days_to_add = 2
-    elif criticality_level == "ELEVATED":
-        days_to_add = 7
-    elif criticality_level == "MODERATE":
-        days_to_add = 15
-    elif criticality_level == "ROUTINE":
-        days_to_add = 30
-        
-    new_complaint.deadline_at = datetime.utcnow() + timedelta(days=days_to_add)
-    
+        official_id, tier = route_complaint_to_official(new_complaint, db)
+        new_complaint.assigned_to = official_id
+        new_complaint.assigned_tier = tier
+        new_complaint.assigned_at = datetime.utcnow()
+        new_complaint.status = "ASSIGNED"
+        new_complaint.deadline_at = datetime.utcnow() + timedelta(days=0.04) # 1 hour
+    else:
+        new_complaint.status = "PENDING_COMMUNITY"
+
     db.add(new_complaint)
     
     # Increment assigned count for official
@@ -162,6 +178,28 @@ async def upvote_complaint(id: str, req: UpvoteRequest, request: Request, db: Se
         complaint.upvote_count += 1
         # Recalculate stars with new upvote counts
         complaint.star_rating = calculate_stars_rating(complaint.criticality_score, complaint.upvote_count)
+        
+        # 5-Citizen Verification threshold trigger
+        if complaint.status == "PENDING_COMMUNITY" and complaint.upvote_count >= 5:
+            official_id, tier = route_complaint_to_official(complaint, db)
+            complaint.assigned_to = official_id
+            complaint.assigned_tier = tier
+            complaint.assigned_at = datetime.utcnow()
+            complaint.status = "ASSIGNED"
+            
+            days_to_add = 30
+            if complaint.criticality_level == "CRITICAL": days_to_add = 0.08
+            elif complaint.criticality_level == "HIGH": days_to_add = 2
+            elif complaint.criticality_level == "ELEVATED": days_to_add = 7
+            elif complaint.criticality_level == "MODERATE": days_to_add = 15
+            
+            complaint.deadline_at = datetime.utcnow() + timedelta(days=days_to_add)
+            
+            if official_id:
+                official = db.query(Official).filter(Official.id == official_id).first()
+                if official:
+                    official.complaints_assigned += 1
+
         db.commit()
         db.refresh(complaint)
         

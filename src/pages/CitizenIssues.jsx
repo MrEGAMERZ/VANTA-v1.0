@@ -215,7 +215,7 @@ const CitizenIssues = () => {
           {/* Left Column */}
           <div className="issues-left">
             <div className="receptacle-header">
-              <span>ACTIVE RECEPTACLE</span>
+              <span>MY REPORTS</span>
               <span style={{ color: '#555570' }}>TOTAL: {filteredIssues.length}</span>
             </div>
             
@@ -256,7 +256,7 @@ const CitizenIssues = () => {
                 <div className="action-block priority">
                   PRIORITY:<br/>{activeIssue.priority}
                 </div>
-                <button className="btn-solid" onClick={() => alert("Auto-escalation scan protocol queued.")}>SWEEP</button>
+                <button className="btn-solid" onClick={() => alert("Issue flagged for review.")}>FLAG</button>
               </div>
 
               <h1 className="detail-title">{activeIssue.title}</h1>
@@ -287,7 +287,7 @@ const CitizenIssues = () => {
                 {/* Panel 1 */}
                 <div className="panel-card">
                   <div className="panel-title">
-                    NEURAL DIAGNOSTIC
+                    AI ANALYSIS
                     <Sparkles size={14} />
                   </div>
                   <div className="panel-text">
@@ -311,7 +311,7 @@ const CitizenIssues = () => {
 
                 {/* Panel 2 */}
                 <div className="panel-card">
-                  <div className="panel-title">RESOURCE ALLOCATION</div>
+                  <div className="panel-title">ASSIGNMENT DETAILS</div>
                   <div className="resource-grid">
                     <div className="rg-label">Assigned<br/>Unit:</div>
                     <div className="rg-value">{activeIssue.unit}</div>
@@ -329,7 +329,7 @@ const CitizenIssues = () => {
               {/* Timeline */}
               {activeIssue.events.length > 0 && (
                 <div className="timeline-section">
-                  <div className="timeline-title">EVENT CHRONOLOGY</div>
+                  <div className="timeline-title">TIMELINE</div>
                   
                   <div className="chronology-tree">
                     {activeIssue.events.map((event, idx) => (

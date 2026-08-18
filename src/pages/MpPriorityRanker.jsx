@@ -100,7 +100,7 @@ const MpPriorityRanker = () => {
             disabled={loading}
             style={{ fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
           >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> RE-RUN AI ENGINE
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> GENERATE PROJECT REPORTS
           </button>
           <button 
             className="btn-primary" 

@@ -1,8 +1,18 @@
+"""
+Resolution & Verification Router Module
+=======================================
+Handles the official resolution submission and the citizen-triggered verification loop.
+- `POST /{id}/resolve`: Officials mark an issue as fixed (Moves to `PENDING_VERIFICATION`).
+- `POST /{id}/verify`: Citizens vote YES or NO.
+    - YES sets status to `RESOLVED`, awards official score, and boosts citizen reputation points.
+    - NO sets status to `ASSIGNED` (False Closure), penalizes the official, and re-opens the ticket.
+"""
+
 from fastapi import APIRouter, Depends, HTTPException, Request
-from sqlalchemy.orm import Session
+from database import Session
 from datetime import datetime
 from database import get_db
-from models.models import Complaint, Official, VerificationLog
+from models.models import Complaint, Official, VerificationLog, Citizen
 from schemas.schemas import ResolutionSubmit, VerificationVote, ComplaintResponse
 
 router = APIRouter(prefix="/api/complaints", tags=["resolution"])
@@ -54,6 +64,11 @@ async def verify_complaint_resolution(id: str, req: VerificationVote, request: R
         vote=req.vote
     )
     db.add(log)
+    
+    # Citizen Reputation Engine: Award points for participating in governance
+    citizen = db.query(Citizen).filter(Citizen.id == req.citizen_id).first()
+    if citizen:
+        citizen.reward_points += 5
     
     if req.vote:
         complaint.verification_yes += 1

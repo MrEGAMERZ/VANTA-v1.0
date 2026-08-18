@@ -1,3 +1,11 @@
+"""
+VANTA - Governance Intelligence Platform (Backend Entry Point)
+============================================================
+This file initializes the FastAPI application, sets up the SQLite/MongoDB Mock ORM connection, 
+mounts all API routers, configures the WebSocket Connection Manager for real-time telemetry, 
+and serves static files for the frontend deployment.
+"""
+
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,7 +21,7 @@ from database import engine, Base, SessionLocal
 from seed_data import seed_db
 
 # Import routers
-from routes import auth, complaints, officials, map, resolution, escalation, projects
+from routes import auth, complaints, officials, map, resolution, escalation, projects, upload, transparency
 
 # Initialize tables & seed data
 Base.metadata.create_all(bind=engine)
@@ -42,6 +50,14 @@ app.include_router(map.router)
 app.include_router(resolution.router)
 app.include_router(escalation.router)
 app.include_router(projects.router)
+app.include_router(upload.router)
+app.include_router(transparency.router)
+
+from fastapi.staticfiles import StaticFiles
+uploads_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public", "uploads")
+if not os.path.exists(uploads_path):
+    os.makedirs(uploads_path, exist_ok=True)
+app.mount("/public/uploads", StaticFiles(directory=uploads_path), name="uploads")
 
 # WebSocket Connection Manager for real-time map updates
 class ConnectionManager:

@@ -1,3 +1,11 @@
+"""
+JWT Authentication & Cryptography Handler
+=========================================
+Secures the VANTA platform using modern cryptographically signed JSON Web Tokens (JWT).
+- Manages token generation with variable expiry (e.g. 24h for citizens, 8h for officials).
+- Hashes passwords using bcrypt to prevent plaintext storage vulnerabilities.
+"""
+
 import os
 from datetime import datetime, timedelta
 from typing import Union

@@ -1,3 +1,9 @@
+/**
+ * @file CitizenAnalytics.jsx
+ * @description Citizen-facing telemetry and analytics page.
+ * Visualizes the user's civic impact, ward-level resolution speeds, 
+ * and tracks their reputation/reward points gathered through the verification loop.
+ */
 import React, { useEffect, useState } from 'react';
 import { BarChart, Trophy, PieChart, Activity, HelpCircle, CheckCircle, AlertTriangle } from 'lucide-react';
 import { api } from '../services/api';

@@ -420,3 +420,20 @@
   background: #dc2626;
   transform: translateY(-1px);
 }
+
+@media (max-width: 768px) {
+  .issues-split {
+    flex-direction: column;
+  }
+  .issues-left {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #1A1A2A;
+  }
+  .detail-panels {
+    grid-template-columns: 1fr;
+  }
+  .issues-right {
+    padding: 1.5rem;
+  }
+}

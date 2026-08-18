@@ -5,7 +5,7 @@ import {
   MoreHorizontal, Sparkles, Zap
 } from 'lucide-react';
 
-import { api } from '../services/api';
+import { api, WS_URL } from '../services/api';
 import { useToast } from '../components/Toast';
 
 const OfficialDashboard = () => {
@@ -14,23 +14,52 @@ const OfficialDashboard = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({ name: 'Representative', role: 'OFFICIAL' });
+  const [isFlashing, setIsFlashing] = useState(false);
+
+  const fetchComplaints = async () => {
+    try {
+      const data = await api.getComplaints();
+      setComplaints(data);
+    } catch (err) {
+      console.error('Failed to load complaints:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const name = localStorage.getItem('user_name') || 'Hon. Representative';
     const role = localStorage.getItem('user_role') || 'OFFICIAL';
     setProfile({ name, role });
 
-    const fetchComplaints = async () => {
-      try {
-        const data = await api.getComplaints();
-        setComplaints(data);
-      } catch (err) {
-        console.error('Failed to load complaints:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchComplaints();
+
+    let ws;
+    try {
+      ws = new WebSocket(`${WS_URL}/map`);
+      ws.onmessage = (event) => {
+        try {
+          const payload = JSON.parse(event.data);
+          const { event: eventType } = payload;
+          if (eventType === 'ESCALATION_SWEEP') {
+            setIsFlashing(true);
+            showToast('AUTO-ESCALATION DETECTED: A ticket was forcibly escalated to your tier.', 'warning');
+            fetchComplaints();
+            setTimeout(() => setIsFlashing(false), 2000);
+          } else if (eventType === 'STATUS_CHANGE' || eventType === 'NEW_COMPLAINT') {
+            fetchComplaints();
+          }
+        } catch (e) {
+          console.error('Error parsing WS message:', e);
+        }
+      };
+    } catch (err) {
+      console.error('WebSocket connection failed:', err);
+    }
+
+    return () => {
+      if (ws) ws.close();
+    };
   }, []);
 
   if (loading) {
@@ -54,7 +83,7 @@ const OfficialDashboard = () => {
     .slice(0, 4);
 
   return (
-    <main className="main-content" style={{ overflow: 'visible', flex: 'none' }}>
+    <main className={`main-content ${isFlashing ? 'flash-red' : ''}`} style={{ overflow: 'visible', flex: 'none', transition: 'background-color 0.2s ease-in-out', backgroundColor: isFlashing ? 'rgba(220, 38, 38, 0.3)' : 'transparent' }}>
       <div className="dashboard-body">
         
         {/* Page Header */}

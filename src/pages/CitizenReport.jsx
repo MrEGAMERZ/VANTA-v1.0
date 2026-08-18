@@ -1,3 +1,10 @@
+/**
+ * @file CitizenReport.jsx
+ * @description Handles the civic grievance reporting interface for Citizens.
+ * Integrates the Web Speech API for voice-to-text input, falls back to an 
+ * automated typing simulation if unsupported, and captures GPS coordinates 
+ * via the HTML5 Geolocation API.
+ */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
@@ -159,7 +166,7 @@ const CitizenReport = () => {
       <div className="cr-header">
         <div className="cr-title-area">
           <h1 className="cr-title">New Incident Report</h1>
-          <span className="cr-live-badge">LIVE_SESSION</span>
+          <span className="cr-live-badge">Active</span>
         </div>
         <div className="cr-header-right">
           <span>🕒 {time}</span>
@@ -174,7 +181,7 @@ const CitizenReport = () => {
         <div className="cr-left">
           
           <div className="cr-voice-module">
-            <div className="voice-label">VOICE_INPUT_MODULE</div>
+            <div className="voice-label">Voice Input</div>
             
             <div className={`mic-wrapper ${isListening ? 'listening' : ''}`} onClick={handleToggleListen}>
               <div className="mic-ring mic-ring-2"></div>
@@ -186,7 +193,7 @@ const CitizenReport = () => {
             
             <div className="voice-status">
               <div className="status-dot"></div>
-              {isListening ? 'LISTENING_MOD_ACTIVE' : 'READY_FOR_INPUT'}
+              {isListening ? 'Listening...' : 'Ready for input'}
             </div>
             <p className="voice-hint">
               {isListening ? "Listening to your voice..." : "Click mic to describe the civic issue clearly. You can also edit the transcript directly."}
@@ -223,7 +230,7 @@ const CitizenReport = () => {
         <div className="cr-right">
           
           <div className="cr-panel">
-            <div className="panel-label">GEOSPATIAL TAGGING</div>
+            <div className="panel-label">LOCATION</div>
             <button className="btn-edit" onClick={() => showToast(`Coordinates: ${coords.lat}, ${coords.lng}`, "info")}>VIEW</button>
             <div className="geo-content">
               <MapPin size={24} className="geo-icon" />
@@ -236,7 +243,7 @@ const CitizenReport = () => {
           </div>
 
           <div className="cr-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <div className="panel-label">VISUAL EVIDENCE (OPTIONAL)</div>
+            <div className="panel-label">PHOTOS (OPTIONAL)</div>
             
             <div className="evidence-grid">
               <div className="evidence-box active" onClick={() => showToast("Photo capture module connected.", "info")}>
@@ -259,7 +266,7 @@ const CitizenReport = () => {
               <ArrowRight size={24} />
             </button>
             <div className="terms-text">
-              BY SUBMITTING, YOU AGREE TO VANTA'S DATA VERIFICATION PROTOCOLS.
+              BY SUBMITTING, YOU AGREE TO SAMADHAN'S DATA VERIFICATION PROTOCOLS.
             </div>
           </div>
 

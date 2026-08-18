@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VANTA Governance Intelligence Platform — Core Dashboard CSS
+   SAMADHAN Governance Intelligence Platform — Core Dashboard CSS
    Premium dark theme with glassmorphic elements and neon telemetry indicators.
    ========================================================================== */
 
@@ -10,25 +10,25 @@
   --border-glass: rgba(255, 255, 255, 0.06);
   --border-focus: rgba(99, 102, 241, 0.4);
   
-  /* High-fidelity semantic colors */
-  --cyber-indigo: #6366F1;
-  --cyber-indigo-glow: rgba(99, 102, 241, 0.15);
-  --cyber-emerald: #10B981;
-  --cyber-emerald-glow: rgba(16, 185, 129, 0.15);
-  --cyber-amber: #F59E0B;
-  --cyber-amber-glow: rgba(245, 158, 11, 0.15);
-  --cyber-rose: #EF4444;
+  /* High-fidelity semantic colors (UX4G Standard mapped) */
+  --cyber-indigo: var(--india-blue-light, #3333A0);
+  --cyber-indigo-glow: rgba(51, 51, 160, 0.15);
+  --cyber-emerald: var(--forest-green-light, #32A028);
+  --cyber-emerald-glow: rgba(50, 160, 40, 0.15);
+  --cyber-amber: var(--saffron, #FF9933);
+  --cyber-amber-glow: rgba(255, 153, 51, 0.15);
+  --cyber-rose: #EF4444; /* Keep red for destructive */
   --cyber-rose-glow: rgba(239, 68, 68, 0.2);
-  --cyber-cyan: #06B6D4;
-  --cyber-cyan-glow: rgba(6, 182, 212, 0.15);
-  --cyber-violet: #8B5CF6;
-  --cyber-violet-glow: rgba(139, 92, 246, 0.15);
+  --cyber-cyan: var(--saffron-light, #FFB366);
+  --cyber-cyan-glow: rgba(255, 179, 102, 0.15);
+  --cyber-violet: var(--india-blue, #000080);
+  --cyber-violet-glow: rgba(0, 0, 128, 0.15);
 
   --text-primary: #F8FAFC;
   --text-secondary: #94A3B8;
   --text-muted: #64748B;
   
-  --font-display: 'Space Grotesk', 'Outfit', 'Inter', sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
   --font-mono: 'Space Mono', 'Fira Code', monospace;
   
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -310,11 +310,12 @@
 .btn-secondary:hover {
   background-color: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, var(--cyber-indigo) 0%, var(--cyber-violet) 100%);
+  background: linear-gradient(135deg, var(--india-blue-light) 0%, var(--india-blue) 100%);
   border: none;
   color: white;
   padding: 0.65rem 1.25rem;
@@ -328,12 +329,12 @@
   gap: 0.5rem;
   cursor: pointer;
   transition: var(--transition-smooth);
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 15px rgba(51, 51, 160, 0.25);
 }
 
 .btn-accent:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(51, 51, 160, 0.4);
   filter: brightness(1.1);
 }
 

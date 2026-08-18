@@ -40,6 +40,16 @@ const CitizenLogin = () => {
     }
   };
 
+  const handleBypass = () => {
+    localStorage.setItem('user_token', 'demo-citizen-token');
+    localStorage.setItem('user_role', 'CITIZEN');
+    localStorage.setItem('user_name', 'Demo Citizen');
+    localStorage.setItem('user_id', 'demo-1234');
+    localStorage.setItem('citizen_phone', '+919999999999');
+    showToast('Bypassed login for demo!', 'success');
+    navigate('/citizen/home');
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-modal">
@@ -95,6 +105,15 @@ const CitizenLogin = () => {
             </button>
           </form>
         )}
+
+        <div style={{ marginTop: '2rem', borderTop: '1px solid #1E1E35', paddingTop: '1rem', textAlign: 'center' }}>
+          <button 
+            onClick={handleBypass}
+            style={{ background: '#1E1E35', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', width: '100%', fontWeight: 600 }}
+          >
+            Bypass Login (Hackathon Demo)
+          </button>
+        </div>
       </div>
     </div>
   );

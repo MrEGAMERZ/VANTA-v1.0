@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timedelta
-from sqlalchemy.orm import Session
+from database import Session
 from database import engine, SessionLocal, Base
 from models.models import Citizen, Official, Complaint, Upvote, DevelopmentProject
 from services.ai_engine import calculate_stars_rating

@@ -5,7 +5,7 @@ import {
   Home, AlertTriangle, Map, Play, ArrowRightLeft, AlertCircle, CheckCircle2
 } from 'lucide-react';
 import './ComplaintDetail.css';
-import { complaintsData } from '../data/mockComplaints';
+import './ComplaintDetail.css';
 import { api } from '../services/api';
 import { useToast } from '../components/Toast';
 
@@ -19,6 +19,32 @@ const ComplaintDetail = () => {
   const [citizen, setCitizen] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [resNote, setResNote] = useState('');
+  const [resPhoto, setResPhoto] = useState('');
+  const [resSubmitting, setResSubmitting] = useState(false);
+
+  const handleResolve = async () => {
+    if (!resNote) {
+      showToast('Please enter resolution notes.', 'warning');
+      return;
+    }
+    setResSubmitting(true);
+    try {
+      await api.submitResolution(id, {
+        action: 'Repair',
+        note: resNote,
+        photo_urls: resPhoto ? [resPhoto] : []
+      });
+      showToast('Resolution submitted. Ticket is now PENDING_VERIFICATION.', 'success');
+      setResNote('');
+      setResPhoto('');
+      loadComplaintData();
+    } catch (err) {
+      showToast('Failed to submit resolution.', 'error');
+    } finally {
+      setResSubmitting(false);
+    }
+  };
 
   const loadComplaintData = async () => {
     try {
@@ -53,10 +79,7 @@ const ComplaintDetail = () => {
     loadComplaintData();
   }, [id]);
 
-  // Find in mock data as fallback if not in DB
-  const mockFallback = complaintsData.find(c => c.id === id);
-
-  if (loading && !mockFallback) {
+  if (loading) {
     return (
       <div style={{ color: 'white', padding: '5rem', textAlign: 'center', fontFamily: 'Space Grotesk' }}>
         <h2>ACCESSING SECURE DATABASE TELEMETRY...</h2>
@@ -64,7 +87,17 @@ const ComplaintDetail = () => {
     );
   }
 
-  const activeComplaint = complaint || mockFallback || complaintsData[0];
+  if (error || !complaint) {
+    return (
+      <div style={{ color: 'white', padding: '5rem', textAlign: 'center', fontFamily: 'Space Grotesk' }}>
+        <h2>ERROR 404: TICKET NOT FOUND</h2>
+        <p>The requested complaint could not be located in the secure database.</p>
+        <button onClick={() => navigate(-1)} style={{ marginTop: '20px', padding: '10px 20px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Return to Safety</button>
+      </div>
+    );
+  }
+
+  const activeComplaint = complaint;
 
   // Map to UI Structure
   const displayComplaint = {
@@ -96,43 +129,15 @@ const ComplaintDetail = () => {
   };
 
   const handleMarkInProgress = async () => {
-    if (!complaint) {
-      showToast("This is a mock ticket and cannot be modified.", "warning");
-      return;
-    }
     try {
-      await api.updateComplaintStatus(complaint.id, 'IN_PROGRESS');
-      showToast('Status updated to IN PROGRESS', 'success');
-      loadComplaintData();
+      await api.updateComplaintStatus(activeComplaint.rawId, 'IN_PROGRESS');
+      showToast("Status updated to IN_PROGRESS", "success");
+      loadComplaintData(); // refresh
     } catch (err) {
-      showToast('Failed to update status.', 'error');
+      showToast("Failed to update status", "error");
     }
   };
 
-  const handleResolve = async () => {
-    if (!complaint) {
-      showToast("This is a mock ticket and cannot be modified.", "warning");
-      return;
-    }
-    const note = prompt("Enter resolution notes:");
-    if (note === null) return;
-    if (note.trim() === '') {
-      showToast("Resolution note is required.", "warning");
-      return;
-    }
-    try {
-      await api.submitResolution(complaint.id, {
-        resolution_note: note,
-        resolution_action: 'REPAIRED',
-        amount_spent: 24000.0,
-        resolution_photos: []
-      });
-      showToast('Resolution submitted for verification!', 'success');
-      loadComplaintData();
-    } catch (err) {
-      showToast('Failed to submit resolution.', 'error');
-    }
-  };
 
   return (
     <div className="cmd-view-container">
@@ -142,7 +147,7 @@ const ComplaintDetail = () => {
           <button className="back-btn" onClick={() => navigate(-1)}>
             <ArrowLeft size={20} />
           </button>
-          <div className="cmd-brand">CivicPulse Governance</div>
+          <div className="cmd-brand">SAMADHAN</div>
           <div className="cmd-badge">CMD_VIEW: #{displayComplaint.id}</div>
         </div>
         <div className="cmd-topbar-right">
@@ -169,6 +174,11 @@ const ComplaintDetail = () => {
               </div>
             </div>
             
+            {displayComplaint.is_fake_flagged && (
+              <div style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)', border: '1px solid #dc2626', color: '#fca5a5', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
+                <AlertTriangle size={16} /> POTENTIAL FRAUD: AI detected mismatch between image and text description.
+              </div>
+            )}
             <h1 className="cmd-title">{displayComplaint.title}</h1>
             <div className="cmd-meta">
               REPORTED: {displayComplaint.reportedAt} | LAT: {displayComplaint.location.lat}, LON: {displayComplaint.location.lon}
@@ -216,11 +226,17 @@ const ComplaintDetail = () => {
             <div className="evidence-split">
               
               {/* Simulated Image */}
-              <div className="evidence-image-container">
+              <div className="evidence-image-container" style={{ position: 'relative' }}>
                 <div className="fake-sinkhole"></div>
                 <div className="ai-bounding-box">
-                  <div className="ai-box-label">{displayComplaint.aiDiagnostics.type}: 98%</div>
+                  <div className="ai-box-label">{displayComplaint.aiDiagnostics.type}: {displayComplaint.confidence_score !== undefined ? `${(displayComplaint.confidence_score * 100).toFixed(1)}%` : '98%'}</div>
                 </div>
+                {displayComplaint.vision_verified !== undefined && (
+                  <div style={{ position: 'absolute', top: '10px', right: '10px', background: displayComplaint.vision_verified ? 'rgba(16, 185, 129, 0.9)' : 'rgba(220, 38, 38, 0.9)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', zIndex: 10 }}>
+                    {displayComplaint.vision_verified ? <CheckCircle2 size={10} /> : <AlertTriangle size={10} />}
+                    {displayComplaint.vision_verified ? 'VISION VERIFIED' : 'VISION MISMATCH'}
+                  </div>
+                )}
               </div>
 
               {/* AI Diagnostics */}
@@ -229,7 +245,7 @@ const ComplaintDetail = () => {
                   <div className="ai-box-head">
                     <Home size={12} /> AI DETECT: {displayComplaint.aiDiagnostics.type}
                   </div>
-                  <div className="ai-box-val purple-text">{displayComplaint.aiDiagnostics.probability}</div>
+                  <div className="ai-box-val purple-text">{displayComplaint.confidence_score !== undefined ? `${(displayComplaint.confidence_score * 100).toFixed(1)}% CONFIDENCE` : displayComplaint.aiDiagnostics.probability}</div>
                 </div>
 
                 <div className="ai-box red">
@@ -237,6 +253,13 @@ const ComplaintDetail = () => {
                     <AlertTriangle size={12} /> RISK ASSESSMENT
                   </div>
                   <div className="ai-box-val red-text">{displayComplaint.aiDiagnostics.risk}</div>
+                  {displayComplaint.risk_flags && displayComplaint.risk_flags.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginTop: '0.5rem' }}>
+                      {displayComplaint.risk_flags.map((flag, idx) => (
+                        <span key={idx} style={{ background: 'rgba(220, 38, 38, 0.15)', color: '#fca5a5', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold', border: '1px solid rgba(220, 38, 38, 0.3)' }}>{flag}</span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="location-box">
@@ -257,7 +280,28 @@ const ComplaintDetail = () => {
             <textarea 
               className="log-textarea" 
               placeholder="Enter tactical update or resolution notes..."
+              value={resNote}
+              onChange={(e) => setResNote(e.target.value)}
+              disabled={displayComplaint.status === 'PENDING_VERIFICATION' || displayComplaint.status === 'RESOLVED'}
             ></textarea>
+            <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <input 
+                type="text" 
+                placeholder="Photo URL (Optional)" 
+                style={{ width: '100%', padding: '0.75rem', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-glass)', borderRadius: '6px', color: 'white', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}
+                value={resPhoto}
+                onChange={(e) => setResPhoto(e.target.value)}
+                disabled={displayComplaint.status === 'PENDING_VERIFICATION' || displayComplaint.status === 'RESOLVED'}
+              />
+              <button 
+                className="btn-primary" 
+                onClick={handleResolve} 
+                disabled={resSubmitting || displayComplaint.status === 'PENDING_VERIFICATION' || displayComplaint.status === 'RESOLVED'}
+                style={{ marginTop: '0.5rem', width: '100%' }}
+              >
+                {resSubmitting ? 'SUBMITTING...' : (displayComplaint.status === 'PENDING_VERIFICATION' ? 'VERIFICATION PENDING' : (displayComplaint.status === 'RESOLVED' ? 'CLOSED' : 'SUBMIT RESOLUTION & REQUEST VERIFICATION'))}
+              </button>
+            </div>
           </div>
 
         </div>

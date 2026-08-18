@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from database import Session
 from database import get_db
 from services.escalation import check_and_escalate_overdue_complaints
 from models.models import EscalationLog

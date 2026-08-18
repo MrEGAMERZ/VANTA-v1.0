@@ -290,20 +290,43 @@ CMD ["python", "backend/main.py"]
 
 ---
 
+### Phase 9 — Business & Legal Compliance
+
+> [!CAUTION]
+> To ensure the platform is "legally perfect" and ideas are protected for the hackathon and beyond, we must implement proper legal frameworks.
+
+#### [NEW] `LICENSE`
+- Choose an appropriate software license to protect the codebase.
+- We will default to a **Proprietary/Closed Source License** to protect the IP ("ideas are perfect") before the hackathon presentation, preventing unauthorized use or copying. We can switch to Open Source (e.g., MIT, Apache 2.0) later if required by the government.
+
+#### [NEW] `PRIVACY_POLICY.md` & `TERMS_OF_SERVICE.md`
+- Since the application collects citizen phone numbers, GPS locations, and potentially sensitive grievance data, we must have clear policies.
+- Outline data retention, user consent (GDPR/DPDP India compliance), and terms of usage.
+
+#### [NEW] `CONFIDENTIALITY.md`
+- Add a confidentiality notice or "Patent Pending" style disclaimer to protect the novel ideas (like the tiered escalation and verification loop) from being stolen by other teams or unauthorized parties prior to official submission.
+
+#### [MODIFY] All Source Code Files
+- Inject a standard Copyright and Confidentiality Header into all critical `.py`, `.jsx`, and `.js` files asserting ownership by Team H2K.
+
+#### [NEW] Dependency License Audit
+- The current dependencies (`react`, `vite`, `fastapi`, `pymongo`, etc.) are permissively licensed (MIT, BSD, Apache). We will add an automated checker to ensure no viral GPL dependencies are introduced in the future that could force open-sourcing of proprietary ideas.
+
+---
+
 ## Open Questions
 
 > [!IMPORTANT]
 > These decisions will affect the implementation. Please review:
 
-1. **Gemini API Key**: Your `.env` currently has `GEMINI_API_KEY=` (empty). Do you have a key to provide? Without it, the AI engine falls back to keyword-based rules, which still works but is less impressive for demos.
-
-2. **MongoDB Atlas vs Local**: For deployment, should I configure MongoDB Atlas (cloud-hosted, free tier available) or do you plan to run MongoDB on your own server?
-
-3. **Real OTP Service**: Currently using hardcoded `"123456"`. Do you want me to integrate a real SMS OTP provider (e.g., Twilio, MSG91) or keep the mock OTP for now?
-
-4. **File Upload Storage**: For complaint photos and resolution evidence, should I use local file storage (simpler) or integrate a cloud storage provider (e.g., Cloudinary, AWS S3)?
-
-5. **Branding**: The app alternates between "VANTA", "CivicPulse", and "CivicPulse Governance" across different pages. Which brand name should be the canonical one everywhere?
+1. **Software License**: Do you want to keep the codebase entirely **Proprietary/Closed Source** for now to protect your ideas, or do you want to release it under an **Open Source** license (like MIT or Apache 2.0)?
+2. **Entity Name**: For the legal documents (Privacy Policy, Terms of Service, Copyright headers), should I use "Team H2K", "Government of Jharkhand", or a specific company name as the legal entity?
+3. **Data Retention Policy**: How long should we legally state that we keep citizen data (e.g., phone numbers, locations) after a complaint is resolved? (Standard is 1-3 years or upon user deletion request).
+4. **Gemini API Key**: Your `.env` currently has `GEMINI_API_KEY=` (empty). Do you have a key to provide? Without it, the AI engine falls back to keyword-based rules, which still works but is less impressive for demos.
+5. **MongoDB Atlas vs Local**: For deployment, should I configure MongoDB Atlas (cloud-hosted, free tier available) or do you plan to run MongoDB on your own server?
+6. **Real OTP Service**: Currently using hardcoded `"123456"`. Do you want me to integrate a real SMS OTP provider (e.g., Twilio, MSG91) or keep the mock OTP for now?
+7. **File Upload Storage**: For complaint photos and resolution evidence, should I use local file storage (simpler) or integrate a cloud storage provider (e.g., Cloudinary, AWS S3)?
+8. **Branding**: The app alternates between "VANTA", "CivicPulse", and "CivicPulse Governance" across different pages. Which brand name should be the canonical one everywhere?
 
 ---
 

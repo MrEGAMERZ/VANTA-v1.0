@@ -1,13 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 :root {
-  --bg-color: #0F1014;
-  --card-bg: #16181D;
+  --bg-color: #0B0E14;
+  --card-bg: rgba(22, 24, 29, 0.65);
   --text-primary: #FFFFFF;
   --text-secondary: #A0A5B1;
   --text-muted: #6B7280;
-  --accent-blue: #8B9DFF;
-  --accent-green: #34D399;
-  --border-color: #2D313D;
-  --input-bg: #1C1E26;
+  
+  /* UX4G Official Colors */
+  --india-blue: #000080;
+  --india-blue-light: #3333A0;
+  --saffron: #FF9933;
+  --saffron-light: #FFB366;
+  --forest-green: #138808;
+  --forest-green-light: #32A028;
+
+  --accent-blue: var(--india-blue-light);
+  --accent-green: var(--forest-green-light);
+  --accent-saffron: var(--saffron-light);
+  
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --input-bg: rgba(0, 0, 0, 0.2);
   
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -148,7 +162,7 @@ p {
 }
 
 .auth-modal h1 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 1.85rem;
   font-weight: 700;
   margin: 0 0 0.4rem 0;
@@ -201,22 +215,22 @@ p {
   padding: 0.95rem;
   border-radius: 10px;
   border: none;
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  background: linear-gradient(135deg, var(--india-blue-light) 0%, var(--india-blue) 100%);
   color: white;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 1.25rem;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 15px rgba(51, 51, 160, 0.3);
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
-  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(51, 51, 160, 0.45);
+  filter: brightness(1.1);
 }
 
 .btn-primary:active {
@@ -255,11 +269,11 @@ p {
   color: #64748B;
   padding: 0.65rem 0;
   cursor: pointer;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-weight: 600;
   font-size: 0.95rem;
   position: relative;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .tab:hover {
@@ -277,8 +291,8 @@ p {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #6366F1, #8B5CF6);
-  box-shadow: 0 0 8px #6366F1;
+  background: linear-gradient(90deg, var(--saffron-light), var(--saffron));
+  box-shadow: 0 0 8px var(--saffron-light);
 }
 
 /* Helper display for demo credentials */

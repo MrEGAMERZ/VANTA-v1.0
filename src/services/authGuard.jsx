@@ -1,3 +1,10 @@
+/**
+ * @file authGuard.jsx
+ * @description Route protection wrapper for the SAMADHAN platform.
+ * Validates the presence of a JWT token and ensures the user's role 
+ * matches the required roles for the requested route.
+ * Redirects unauthorized access to the appropriate portal.
+ */
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
