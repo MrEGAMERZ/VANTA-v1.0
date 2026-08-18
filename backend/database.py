@@ -3,6 +3,7 @@ SAMADHAN Backend — Database Configuration
 Custom Mock ORM wrapping PyMongo to support SQLAlchemy-style syntax.
 """
 import os
+import re
 import uuid
 import logging
 from datetime import datetime
@@ -10,23 +11,18 @@ from pymongo import MongoClient
 import urllib.parse
 from dotenv import load_dotenv
 
-# Load env variables
 load_dotenv()
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("samadhan-db")
 
-# Read database URL
 DATABASE_URL = os.getenv("DATABASE_URL") or os.getenv("MONGODB_URI")
-# Fallback to local MongoDB if not set or if it is sqlite
 if not DATABASE_URL or not (DATABASE_URL.startswith("mongodb://") or DATABASE_URL.startswith("mongodb+srv://")):
     DATABASE_URL = "mongodb://localhost:27017/h2k"
 
-logger.info(f"Connecting to MongoDB at: {DATABASE_URL.split('@')[-1]}") # Redact credentials for logging
+logger.info(f"Connecting to MongoDB at: {DATABASE_URL.split('@')[-1]}")
 
-# Extract db name
 try:
     parsed = urllib.parse.urlparse(DATABASE_URL)
     db_name = parsed.path.lstrip('/') or "h2k"
@@ -36,11 +32,10 @@ except Exception as e:
     logger.error(f"Failed to parse database URL: {e}")
     db_name = "h2k"
 
-# Initialize Client
 client = MongoClient(DATABASE_URL)
 db = client[db_name]
 
-# Dummy Engine & MetaData
+
 class DummyEngine:
     pass
 
@@ -50,7 +45,6 @@ class MetaData:
 
 engine = DummyEngine()
 
-# Dummy Types and Functions
 class String: pass
 class Integer: pass
 class Float: pass
@@ -65,23 +59,31 @@ def ForeignKey(*args, **kwargs):
 def relationship(*args, **kwargs):
     return None
 
+
 class Func:
-    def now(self):
-        return datetime.utcnow
+    @staticmethod
+    def now():
+        return datetime.utcnow()
 
 func = Func()
 
-# Model Query building blocks
+
 class SortExpression:
+    __slots__ = ("field_name", "direction")
+
     def __init__(self, field_name, direction):
         self.field_name = field_name
         self.direction = direction
 
+
 class FieldExpression:
+    __slots__ = ("field_name", "op", "value")
+
     def __init__(self, field_name, op, value):
         self.field_name = field_name
         self.op = op
         self.value = value
+
 
 class ModelField:
     def __init__(self, name):
@@ -120,6 +122,7 @@ class ModelField:
     def asc(self):
         return SortExpression(self.name, 1)
 
+
 class Column:
     def __init__(self, type_class=None, *args, **kwargs):
         self.type_class = type_class
@@ -141,11 +144,16 @@ class Column:
         instance.__dict__[self.name] = value
 
     def get_default(self):
+        if self.default is None:
+            return None
         if callable(self.default):
             return self.default()
-        elif isinstance(self.default, (list, dict)):
-            return type(self.default)(self.default)
+        if isinstance(self.default, list):
+            return []
+        if isinstance(self.default, dict):
+            return {}
         return self.default
+
 
 class Base:
     metadata = MetaData()
@@ -158,7 +166,6 @@ class Base:
                 setattr(self, name, kwargs[name])
             else:
                 setattr(self, name, col.get_default())
-        # Set extra fields (like relationships or custom parameters)
         for k, v in kwargs.items():
             if k not in fields:
                 setattr(self, k, v)
@@ -180,10 +187,39 @@ class Base:
             val = getattr(self, name, None)
             if name == "id" and val:
                 doc["_id"] = val
-            doc[name] = val
+            elif name != "_id":
+                doc[name] = val
         return doc
 
-# Query Execution Class
+
+def _escape_regex(value: str) -> str:
+    return re.escape(value)
+
+
+def _build_mongo_filter(name: str, op: str, val):
+    target = "_id" if name == "id" else name
+    if op == "eq":
+        return {target: val}
+    if op == "ne":
+        return {target: {"$ne": val}}
+    if op == "lt":
+        return {target: {"$lt": val}}
+    if op == "gt":
+        return {target: {"$gt": val}}
+    if op == "le":
+        return {target: {"$lte": val}}
+    if op == "ge":
+        return {target: {"$gte": val}}
+    if op == "like":
+        regex_val = _escape_regex(val).replace(r"\%", ".*").replace(r"\_", ".")
+        return {target: {"$regex": regex_val, "$options": "i"}}
+    if op == "notin":
+        return {target: {"$nin": list(val)}}
+    if op == "in":
+        return {target: {"$in": list(val)}}
+    return {}
+
+
 class MongoQuery:
     def __init__(self, model_class, collection, session=None):
         self.model_class = model_class
@@ -191,37 +227,18 @@ class MongoQuery:
         self.session = session
         self.filters = {}
         self.sorts = []
+        self._limit_val = None
+        self._skip_val = None
 
     def filter(self, *criterion):
         for crit in criterion:
             if isinstance(crit, FieldExpression):
-                name, op, val = crit.field_name, crit.op, crit.value
-                if op == "eq":
-                    # If comparing with id, route to _id in MongoDB
-                    if name == "id":
-                        self.filters["_id"] = val
+                mongo_filter = _build_mongo_filter(crit.field_name, crit.op, crit.value)
+                for key, val in mongo_filter.items():
+                    if key in self.filters and isinstance(self.filters[key], dict) and isinstance(val, dict):
+                        self.filters[key].update(val)
                     else:
-                        self.filters[name] = val
-                elif op == "ne":
-                    target = "_id" if name == "id" else name
-                    self.filters[target] = {"$ne": val}
-                elif op == "lt":
-                    self.filters[name] = {"$lt": val}
-                elif op == "gt":
-                    self.filters[name] = {"$gt": val}
-                elif op == "le":
-                    self.filters[name] = {"$lte": val}
-                elif op == "ge":
-                    self.filters[name] = {"$gte": val}
-                elif op == "like":
-                    regex_val = val.replace("%", ".*")
-                    self.filters[name] = {"$regex": regex_val, "$options": "i"}
-                elif op == "notin":
-                    target = "_id" if name == "id" else name
-                    self.filters[target] = {"$nin": list(val)}
-                elif op == "in":
-                    target = "_id" if name == "id" else name
-                    self.filters[target] = {"$in": list(val)}
+                        self.filters[key] = val
         return self
 
     def order_by(self, *criterion):
@@ -232,35 +249,55 @@ class MongoQuery:
                 self.sorts.append((crit.name, 1))
         return self
 
+    def limit(self, n):
+        self._limit_val = n
+        return self
+
+    def skip(self, n):
+        self._skip_val = n
+        return self
+
+    def count(self):
+        return self.collection.count_documents(self.filters)
+
+    def _hydrate(self, doc):
+        if doc is None:
+            return None
+        if "_id" in doc and "id" not in doc:
+            doc["id"] = doc["_id"]
+        instance = self.model_class(**doc)
+        if self.session:
+            self.session.add(instance)
+        return instance
+
     def first(self):
         cursor = self.collection.find(self.filters)
         if self.sorts:
             cursor = cursor.sort(self.sorts)
+        if self._skip_val:
+            cursor = cursor.skip(self._skip_val)
+        cursor = cursor.limit(1)
         doc = next(cursor, None)
-        if doc:
-            if "_id" in doc and "id" not in doc:
-                doc["id"] = doc["_id"]
-            instance = self.model_class(**doc)
-            if self.session:
-                self.session.add(instance)
-            return instance
-        return None
+        return self._hydrate(doc)
 
     def all(self):
         cursor = self.collection.find(self.filters)
         if self.sorts:
             cursor = cursor.sort(self.sorts)
-        results = []
-        for doc in cursor:
-            if "_id" in doc and "id" not in doc:
-                doc["id"] = doc["_id"]
-            instance = self.model_class(**doc)
-            if self.session:
-                self.session.add(instance)
-            results.append(instance)
-        return results
+        if self._skip_val:
+            cursor = cursor.skip(self._skip_val)
+        if self._limit_val:
+            cursor = cursor.limit(self._limit_val)
+        return [self._hydrate(doc) for doc in cursor]
 
-# Session Class
+    def update(self, **fields):
+        if fields:
+            self.collection.update_many(self.filters, {"$set": fields})
+
+    def delete(self):
+        self.collection.delete_many(self.filters)
+
+
 class MongoSession:
     def __init__(self):
         self.to_save = []
@@ -275,18 +312,15 @@ class MongoSession:
             self.to_save.append(instance)
 
     def commit(self):
-        # Insert or update
         for instance in self.to_save:
             collection_name = instance.__tablename__
             doc = instance.to_dict()
             if not doc.get("_id"):
                 doc["_id"] = str(uuid.uuid4())
                 instance.id = doc["_id"]
-                doc["id"] = instance.id
             db[collection_name].replace_one({"_id": instance.id}, doc, upsert=True)
         self.to_save.clear()
 
-        # Delete
         for instance in self.to_delete:
             collection_name = instance.__tablename__
             if getattr(instance, "id", None):
@@ -294,7 +328,6 @@ class MongoSession:
         self.to_delete.clear()
 
     def refresh(self, instance):
-        # Read back from DB
         collection_name = instance.__tablename__
         if not getattr(instance, "id", None):
             return
@@ -310,9 +343,10 @@ class MongoSession:
     def close(self):
         pass
 
-# Factory
+
 SessionLocal = MongoSession
 Session = MongoSession
+
 
 def get_db():
     db_session = MongoSession()

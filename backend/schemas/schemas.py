@@ -2,7 +2,16 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Any
 from datetime import datetime
 
-# Citizen Schemas
+VALID_STATUSES = [
+    "FILED", "ASSIGNED", "VIEWED", "IN_PROGRESS",
+    "ESCALATED", "PENDING_VERIFICATION", "RESOLVED", "ARCHIVED",
+]
+
+VALID_CRITICALITY = [
+    "ROUTINE", "MODERATE", "ELEVATED", "HIGH", "CRITICAL", "CATASTROPHIC",
+]
+
+
 class CitizenBase(BaseModel):
     phone: str
     name: Optional[str] = None
@@ -11,8 +20,10 @@ class CitizenBase(BaseModel):
     location_lat: Optional[float] = None
     location_lng: Optional[float] = None
 
+
 class CitizenCreate(CitizenBase):
     pass
+
 
 class CitizenResponse(CitizenBase):
     id: str
@@ -22,7 +33,7 @@ class CitizenResponse(CitizenBase):
     class Config:
         from_attributes = True
 
-# Official Schemas
+
 class OfficialBase(BaseModel):
     name: str
     role: str
@@ -30,8 +41,10 @@ class OfficialBase(BaseModel):
     phone: Optional[str] = None
     email: str
 
+
 class OfficialCreate(OfficialBase):
     password: str
+
 
 class OfficialResponse(OfficialBase):
     id: str
@@ -44,9 +57,9 @@ class OfficialResponse(OfficialBase):
     class Config:
         from_attributes = True
 
-# Complaint Schemas
+
 class ComplaintCreate(BaseModel):
-    text_content: str
+    text_content: str = Field(..., min_length=1, max_length=5000)
     text_original: Optional[str] = None
     language_detected: Optional[str] = "en"
     voice_file_url: Optional[str] = None
@@ -58,10 +71,12 @@ class ComplaintCreate(BaseModel):
     district: Optional[str] = None
     citizen_id: Optional[str] = None
 
+
 class ComplaintTimelineItem(BaseModel):
     action: str
     time: str
     desc: str
+
 
 class ComplaintResponse(BaseModel):
     id: str
@@ -97,8 +112,7 @@ class ComplaintResponse(BaseModel):
     near_hospital: bool
     near_highway: bool
     ai_photo_analysis: Optional[Any] = None
-    
-    # Resolution details
+
     resolution_status: Optional[str] = None
     resolution_note: Optional[str] = None
     resolution_photos: Optional[List[str]] = []
@@ -112,35 +126,38 @@ class ComplaintResponse(BaseModel):
     class Config:
         from_attributes = True
 
-# Resolution Submission
-class ResolutionSubmit(BaseModel):
-    resolution_note: str
-    resolution_photos: Optional[List[str]] = []
-    resolution_action: str  # REPAIRED/REPLACED/NEW/TEMP_FIX
-    fund_used: Optional[str] = "Municipal Fund"
-    amount_spent: float
 
-# Upvote & Verification
+class ResolutionSubmit(BaseModel):
+    resolution_note: str = Field(..., min_length=1, max_length=5000)
+    resolution_photos: Optional[List[str]] = []
+    resolution_action: str = Field(..., pattern=r"^(REPAIRED|REPLACED|NEW|TEMP_FIX)$")
+    fund_used: Optional[str] = "Municipal Fund"
+    amount_spent: float = Field(..., ge=0)
+
+
 class UpvoteRequest(BaseModel):
     citizen_id: str
 
+
 class VerificationVote(BaseModel):
     citizen_id: str
-    vote: bool  # True for YES, False for NO
+    vote: bool
 
-# Auth request
+
 class CitizenLoginRequest(BaseModel):
     phone: str
+
 
 class CitizenVerifyRequest(BaseModel):
     phone: str
     otp: str
 
+
 class OfficialLoginRequest(BaseModel):
     email: str
     password: str
 
-# Token response
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
@@ -148,7 +165,7 @@ class TokenResponse(BaseModel):
     name: str
     id: str
 
-# Project recommendation schema
+
 class DevelopmentProjectResponse(BaseModel):
     id: str
     title: str
@@ -168,13 +185,14 @@ class DevelopmentProjectResponse(BaseModel):
     class Config:
         from_attributes = True
 
-# Profile Update Schemas
+
 class CitizenUpdate(BaseModel):
     name: Optional[str] = None
     ward: Optional[str] = None
     district: Optional[str] = None
     location_lat: Optional[float] = None
     location_lng: Optional[float] = None
+
 
 class OfficialUpdate(BaseModel):
     name: Optional[str] = None

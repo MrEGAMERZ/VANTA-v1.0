@@ -5,20 +5,17 @@ from database import engine, SessionLocal, Base
 from models.models import Citizen, Official, Complaint, Upvote, DevelopmentProject
 from services.ai_engine import calculate_stars_rating
 
+
 def seed_db():
-    # Recreate tables (or ensure they exist)
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
-    
-    # Check if we already have seeded data
+
     if db.query(Official).first() is not None:
-        print("Database already seeded. Skipping.")
         db.close()
         return
 
     print("Seeding database...")
 
-    # 1. Seed Officials
     officials = [
         Official(
             id=str(uuid.uuid4()),
@@ -31,7 +28,7 @@ def seed_db():
             resolution_rate=32.1,
             complaints_assigned=25,
             complaints_resolved=8,
-            accountability_score=41  # Prominent Suresh K. score
+            accountability_score=41,
         ),
         Official(
             id=str(uuid.uuid4()),
@@ -44,7 +41,7 @@ def seed_db():
             resolution_rate=88.2,
             complaints_assigned=34,
             complaints_resolved=30,
-            accountability_score=94
+            accountability_score=94,
         ),
         Official(
             id=str(uuid.uuid4()),
@@ -57,7 +54,7 @@ def seed_db():
             resolution_rate=64.5,
             complaints_assigned=19,
             complaints_resolved=12,
-            accountability_score=76
+            accountability_score=76,
         ),
         Official(
             id=str(uuid.uuid4()),
@@ -70,7 +67,7 @@ def seed_db():
             resolution_rate=75.0,
             complaints_assigned=12,
             complaints_resolved=9,
-            accountability_score=85
+            accountability_score=85,
         ),
         Official(
             id=str(uuid.uuid4()),
@@ -83,7 +80,7 @@ def seed_db():
             resolution_rate=70.0,
             complaints_assigned=8,
             complaints_resolved=6,
-            accountability_score=80
+            accountability_score=80,
         ),
         Official(
             id=str(uuid.uuid4()),
@@ -96,33 +93,33 @@ def seed_db():
             resolution_rate=90.0,
             complaints_assigned=5,
             complaints_resolved=4,
-            accountability_score=90
-        )
+            accountability_score=90,
+        ),
     ]
-    
+
     for o in officials:
         db.add(o)
     db.commit()
-    
-    # 2. Seed Citizens
-    citizens = [
-        Citizen(
-            id=str(uuid.uuid4()),
-            phone=f"+91990000000{i}",
-            name=f"Citizen User {i}",
-            ward=f"Ward {7 + (i % 6)}",
-            district="Bengaluru South",
-            location_lat=12.9716 + (i * 0.005),
-            location_lng=77.5946 - (i * 0.005),
-            reward_points=10 * i
+
+    citizens = []
+    for i in range(10):
+        phone = f"+9199000{i:05d}"
+        citizens.append(
+            Citizen(
+                id=str(uuid.uuid4()),
+                phone=phone,
+                name=f"Citizen User {i}",
+                ward=f"Ward {7 + (i % 6)}",
+                district="Bengaluru South",
+                location_lat=12.9716 + (i * 0.005),
+                location_lng=77.5946 - (i * 0.005),
+                reward_points=10 * i,
+            )
         )
-        for i in range(10)
-    ]
     for c in citizens:
         db.add(c)
     db.commit()
 
-    # 3. Seed complaints
     categories = ["Water", "Roads", "Electrical", "Sanitation", "Health", "Education", "Infrastructure"]
     criticalities = [
         ("ROUTINE", 15),
@@ -130,17 +127,15 @@ def seed_db():
         ("ELEVATED", 55),
         ("HIGH", 75),
         ("CRITICAL", 85),
-        ("CATASTROPHIC", 98)
+        ("CATASTROPHIC", 98),
     ]
     statuses = ["FILED", "ASSIGNED", "VIEWED", "IN_PROGRESS", "PENDING_VERIFICATION", "RESOLVED"]
-    
-    # We want a mix of 50 complaints
+
     mla_suresh = officials[0]
     mla_ramesh = officials[1]
     collector = officials[3]
     mp = officials[4]
-    
-    # Seed 5 major ones for demo tracking
+
     complaints = [
         Complaint(
             id=str(uuid.uuid4()),
@@ -162,11 +157,11 @@ def seed_db():
             assigned_to=mla_suresh.id,
             assigned_tier=1,
             status="ASSIGNED",
-            deadline_at=datetime.utcnow() - timedelta(days=7), # Overdue
+            deadline_at=datetime.utcnow() - timedelta(days=7),
             filed_at=datetime.utcnow() - timedelta(days=22),
             assigned_at=datetime.utcnow() - timedelta(days=22),
             is_overdue=True,
-            near_school=True
+            near_school=True,
         ),
         Complaint(
             id=str(uuid.uuid4()),
@@ -188,10 +183,10 @@ def seed_db():
             assigned_to=mla_suresh.id,
             assigned_tier=1,
             status="ESCALATED",
-            deadline_at=datetime.utcnow() - timedelta(days=3), # Overdue
+            deadline_at=datetime.utcnow() - timedelta(days=3),
             filed_at=datetime.utcnow() - timedelta(days=5),
             assigned_at=datetime.utcnow() - timedelta(days=5),
-            is_overdue=True
+            is_overdue=True,
         ),
         Complaint(
             id=str(uuid.uuid4()),
@@ -210,7 +205,7 @@ def seed_db():
             criticality_score=96,
             star_rating=5,
             upvote_count=634,
-            assigned_to=officials[5].id, # Ministry
+            assigned_to=officials[5].id,
             assigned_tier=4,
             status="PENDING_VERIFICATION",
             filed_at=datetime.utcnow() - timedelta(days=3),
@@ -222,18 +217,16 @@ def seed_db():
             amount_spent=250000.0,
             fund_used="Emergency Fund",
             is_temp_fix=True,
-            near_school=True
-        )
+            near_school=True,
+        ),
     ]
-    
-    # Generate 47 other complaints
+
     for i in range(47):
         cat = categories[i % len(categories)]
         crit_name, crit_score = criticalities[i % len(criticalities)]
         stat = statuses[i % len(statuses)]
         ward = f"Ward {7 + (i % 6)}"
-        
-        # assign based on status/criticality
+
         assigned_o = mla_ramesh
         tier = 1
         if i % 3 == 0:
@@ -244,7 +237,10 @@ def seed_db():
         elif i % 7 == 0:
             assigned_o = mp
             tier = 3
-            
+
+        filed = datetime.utcnow() - timedelta(days=i)
+        deadline = filed + timedelta(days=15)
+
         c = Complaint(
             id=str(uuid.uuid4()),
             citizen_id=citizens[i % len(citizens)].id,
@@ -265,18 +261,17 @@ def seed_db():
             assigned_to=assigned_o.id,
             assigned_tier=tier,
             status=stat,
-            filed_at=datetime.utcnow() - timedelta(days=i),
-            assigned_at=datetime.utcnow() - timedelta(days=i),
-            deadline_at=datetime.utcnow() - timedelta(days=i) + timedelta(days=15),
-            is_overdue=stat not in ["RESOLVED", "ARCHIVED"] and i > 15
+            filed_at=filed,
+            assigned_at=filed,
+            deadline_at=deadline,
+            is_overdue=stat not in ["RESOLVED", "ARCHIVED"] and i > 15,
         )
         complaints.append(c)
-        
+
     for c in complaints:
         db.add(c)
     db.commit()
 
-    # 4. Seed development projects (for MP ranker)
     projects = [
         DevelopmentProject(
             id=str(uuid.uuid4()),
@@ -289,8 +284,13 @@ def seed_db():
             criticality_max="CRITICAL",
             budget_estimate=12000000.0,
             scheme_eligible=["Jal Jeevan Mission", "MPLADS"],
-            ai_recommendation="Analysis of 634 individual complaints indicates severe structural failure of the legacy water distribution network in Ward 7. The frequency of 'dry tap' reports has escalated by 300% during summer months. Building a new 12km pipeline network is highly recommended.",
-            rank=1
+            ai_recommendation=(
+                "Analysis of 634 individual complaints indicates severe structural failure "
+                "of the legacy water distribution network in Ward 7. The frequency of "
+                "'dry tap' reports has escalated by 300% during summer months. "
+                "Building a new 12km pipeline network is highly recommended."
+            ),
+            rank=1,
         ),
         DevelopmentProject(
             id=str(uuid.uuid4()),
@@ -303,16 +303,21 @@ def seed_db():
             criticality_max="HIGH",
             budget_estimate=4500000.0,
             scheme_eligible=["NHM (National Health Mission)", "MPLADS"],
-            ai_recommendation="Data indicates a 40% surge in mosquito-borne illness complaints in Ward 12. Cross-referencing with local health data shows the local PHC is under-equipped. Upgrading this facility will address 142 related health complaints.",
-            rank=2
-        )
+            ai_recommendation=(
+                "Data indicates a 40% surge in mosquito-borne illness complaints in Ward 12. "
+                "Cross-referencing with local health data shows the local PHC is under-equipped. "
+                "Upgrading this facility will address 142 related health complaints."
+            ),
+            rank=2,
+        ),
     ]
     for p in projects:
         db.add(p)
-        
+
     db.commit()
     db.close()
     print("Database seeding completed.")
+
 
 if __name__ == "__main__":
     seed_db()

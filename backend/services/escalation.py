@@ -1,75 +1,117 @@
 from database import Session
-from datetime import datetime
+from datetime import datetime, timedelta
 from models.models import Complaint, Official, EscalationLog
 
-def check_and_escalate_overdue_complaints(db: Session):
-    """
-    Scans open complaints, checks if they breached deadlines,
-    and escalates them to the next administrative tier.
-    """
+VALID_TRANSITIONS = {
+    "FILED": {"ASSIGNED"},
+    "ASSIGNED": {"VIEWED", "IN_PROGRESS", "ESCALATED"},
+    "VIEWED": {"IN_PROGRESS", "ESCALATED"},
+    "IN_PROGRESS": {"PENDING_VERIFICATION", "ESCALATED"},
+    "ESCALATED": {"IN_PROGRESS", "PENDING_VERIFICATION"},
+    "PENDING_VERIFICATION": {"RESOLVED", "ASSIGNED"},
+    "RESOLVED": {"ARCHIVED"},
+    "ARCHIVED": set(),
+}
+
+
+def check_and_escalate_overdue_complaints(db: Session) -> int:
     now = datetime.utcnow()
-    
-    # Query all complaints that are not resolved or archived and are past their deadline
+
     overdue_complaints = db.query(Complaint).filter(
         Complaint.status.notin_(["RESOLVED", "ARCHIVED"]),
-        Complaint.deadline_at < now
     ).all()
-    
+
+    overdue = [
+        c for c in overdue_complaints
+        if c.deadline_at is not None and c.deadline_at < now
+    ]
+
     escalations_performed = 0
-    
-    for c in overdue_complaints:
-        # 1. Set overdue flags
+
+    for c in overdue:
         if not c.is_overdue:
             c.is_overdue = True
-            c.star_rating = min(5, c.star_rating + 1) # Auto-bump star priority
-            
-        # 2. Check how long overdue it is and escalate if needed
-        # We perform escalation if it hasn't been escalated recently
+            c.star_rating = min(5, c.star_rating + 1)
+
         current_tier = c.assigned_tier
-        if current_tier < 4: # Can escalate up to Tier 4
-            next_tier = current_tier + 1
-            
-            # Find next tier official
-            next_official = None
-            if next_tier == 2:
-                # District Collector
-                next_official = db.query(Official).filter(Official.role == "COLLECTOR").first()
-            elif next_tier == 3:
-                # MP
-                next_official = db.query(Official).filter(Official.role == "MP").first()
-            elif next_tier == 4:
-                # Ministry
-                next_official = db.query(Official).filter(Official.role == "MINISTRY").first()
-                
-            if next_official:
-                # Log the escalation
-                log = EscalationLog(
-                    complaint_id=c.id,
-                    from_tier=current_tier,
-                    to_tier=next_tier,
-                    from_official_id=c.assigned_to,
-                    to_official_id=next_official.id,
-                    reason=f"Deadline exceeded by {(now - c.deadline_at).days} days. Auto-escalated to tier {next_tier}."
-                )
-                db.add(log)
-                
-                # Penalize previous official's accountability score
-                if c.assigned_to:
-                    prev_official = db.query(Official).filter(Official.id == c.assigned_to).first()
-                    if prev_official:
-                        prev_official.accountability_score = max(0, prev_official.accountability_score - 10)
-                
-                # Reassign
-                c.assigned_to = next_official.id
-                c.assigned_tier = next_tier
-                c.status = "ESCALATED"
-                c.escalation_count += 1
-                
-                # Reset deadline with shorter windows for escalations
-                c.deadline_at = now + (c.deadline_at - c.assigned_at) / 2 # Halve response window
-                c.assigned_at = now
-                
-                escalations_performed += 1
-                
+        if current_tier >= 4:
+            continue
+
+        next_tier = current_tier + 1
+        next_official = _find_official_for_tier(db, next_tier)
+
+        if not next_official:
+            continue
+
+        _perform_escalation(db, c, next_official, current_tier, next_tier, now)
+        escalations_performed += 1
+
     db.commit()
     return escalations_performed
+
+
+def _find_official_for_tier(db: Session, tier: int) -> Official | None:
+    role_map = {
+        2: "COLLECTOR",
+        3: "MP",
+        4: "MINISTRY",
+    }
+    role = role_map.get(tier)
+    if not role:
+        return None
+    return db.query(Official).filter(Official.role == role).first()
+
+
+def _perform_escalation(
+    db: Session,
+    complaint: Complaint,
+    next_official: Official,
+    from_tier: int,
+    to_tier: int,
+    now: datetime,
+):
+    log = EscalationLog(
+        complaint_id=complaint.id,
+        from_tier=from_tier,
+        to_tier=to_tier,
+        from_official_id=complaint.assigned_to,
+        to_official_id=next_official.id,
+        reason=(
+            f"Deadline exceeded by {(now - complaint.deadline_at).days} day(s). "
+            f"Auto-escalated from tier {from_tier} to tier {to_tier}."
+        ),
+    )
+    db.add(log)
+
+    if complaint.assigned_to:
+        prev_official = db.query(Official).filter(
+            Official.id == complaint.assigned_to
+        ).first()
+        if prev_official:
+            prev_official.accountability_score = max(
+                0, prev_official.accountability_score - 10
+            )
+
+    complaint.assigned_to = next_official.id
+    complaint.assigned_tier = to_tier
+    complaint.status = "ESCALATED"
+    complaint.escalation_count += 1
+
+    original_window = _compute_original_window(complaint)
+    new_window = max(timedelta(hours=1), original_window / 2)
+    complaint.deadline_at = now + new_window
+    complaint.assigned_at = now
+
+
+def _compute_original_window(complaint: Complaint) -> timedelta:
+    if complaint.assigned_at and complaint.deadline_at:
+        original = complaint.deadline_at - complaint.assigned_at
+        if original.total_seconds() > 0:
+            return original
+    tier_defaults = {
+        1: timedelta(days=30),
+        2: timedelta(days=14),
+        3: timedelta(days=7),
+        4: timedelta(hours=2),
+    }
+    return tier_defaults.get(complaint.assigned_tier, timedelta(days=30))
