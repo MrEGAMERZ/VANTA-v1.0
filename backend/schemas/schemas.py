@@ -4,12 +4,12 @@ from datetime import datetime
 
 # Citizen Schemas
 class CitizenBase(BaseModel):
-    phone: str
-    name: Optional[str] = None
-    ward: Optional[str] = None
-    district: Optional[str] = None
-    location_lat: Optional[float] = None
-    location_lng: Optional[float] = None
+    phone: str = Field(..., min_length=10, max_length=15)
+    name: Optional[str] = Field(None, max_length=100)
+    ward: Optional[str] = Field(None, max_length=50)
+    district: Optional[str] = Field(None, max_length=100)
+    location_lat: Optional[float] = Field(None, ge=-90.0, le=90.0)
+    location_lng: Optional[float] = Field(None, ge=-180.0, le=180.0)
 
 class CitizenCreate(CitizenBase):
     pass
@@ -24,14 +24,14 @@ class CitizenResponse(CitizenBase):
 
 # Official Schemas
 class OfficialBase(BaseModel):
-    name: str
-    role: str
-    jurisdiction: Optional[str] = None
-    phone: Optional[str] = None
-    email: str
+    name: str = Field(..., min_length=2, max_length=100)
+    role: str = Field(..., max_length=20)
+    jurisdiction: Optional[str] = Field(None, max_length=100)
+    phone: Optional[str] = Field(None, max_length=15)
+    email: str = Field(..., max_length=150)
 
 class OfficialCreate(OfficialBase):
-    password: str
+    password: str = Field(..., min_length=8, max_length=100)
 
 class OfficialResponse(OfficialBase):
     id: str
@@ -46,17 +46,17 @@ class OfficialResponse(OfficialBase):
 
 # Complaint Schemas
 class ComplaintCreate(BaseModel):
-    text_content: str
-    text_original: Optional[str] = None
-    language_detected: Optional[str] = "en"
-    voice_file_url: Optional[str] = None
-    photo_urls: Optional[List[str]] = []
-    location_lat: Optional[float] = None
-    location_lng: Optional[float] = None
-    location_address: Optional[str] = None
-    ward: Optional[str] = None
-    district: Optional[str] = None
-    citizen_id: Optional[str] = None
+    text_content: str = Field(..., min_length=10, max_length=5000)
+    text_original: Optional[str] = Field(None, max_length=5000)
+    language_detected: Optional[str] = Field("en", max_length=10)
+    voice_file_url: Optional[str] = Field(None, max_length=500)
+    photo_urls: Optional[List[str]] = Field([], max_items=5)
+    location_lat: Optional[float] = Field(None, ge=-90.0, le=90.0)
+    location_lng: Optional[float] = Field(None, ge=-180.0, le=180.0)
+    location_address: Optional[str] = Field(None, max_length=255)
+    ward: Optional[str] = Field(None, max_length=50)
+    district: Optional[str] = Field(None, max_length=100)
+    citizen_id: Optional[str] = Field(None, max_length=100)
 
 class ComplaintTimelineItem(BaseModel):
     action: str

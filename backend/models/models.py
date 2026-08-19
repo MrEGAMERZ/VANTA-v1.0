@@ -26,7 +26,7 @@ class Official(Base):
     jurisdiction = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     email = Column(String, unique=True, index=True)
-    password_hash = Column(String, default="password")
+    password_hash = Column(String, nullable=False)
     avg_response_time = Column(Float, default=0.0)
     resolution_rate = Column(Float, default=0.0)
     complaints_assigned = Column(Integer, default=0)
@@ -98,6 +98,17 @@ class Complaint(Base):
     citizen = relationship("Citizen", back_populates="complaints")
     assigned_official = relationship("Official", back_populates="complaints")
     upvote_details = relationship("Upvote", back_populates="complaint")
+
+    def to_safe_dict(self):
+        d = self.to_dict()
+        d.pop("citizen_id", None)
+        d.pop("voice_file_url", None)
+        d["location_address"] = "Redacted for privacy"
+        if d.get("location_lat"): d["location_lat"] = round(d["location_lat"], 2)
+        if d.get("location_lng"): d["location_lng"] = round(d["location_lng"], 2)
+        # Avoid leaking exact resolution photos if private
+        d.pop("resolution_photos", None)
+        return d
 
 class Upvote(Base):
     __tablename__ = "upvotes"

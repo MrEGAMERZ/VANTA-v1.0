@@ -12,7 +12,9 @@ from typing import Union
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 
-SECRET_KEY = os.getenv("SECRET_KEY", "vanta-jwt-hackathon-super-secret-key-1337")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise RuntimeError("CRITICAL: SECRET_KEY environment variable is not set. Refusing to start.")
 ALGORITHM = "HS256"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -38,10 +40,7 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    # Backwards compatibility fallback:
-    if hashed_password == "password":
-        return plain_password == "password"
     try:
         return pwd_context.verify(plain_password, hashed_password)
     except Exception:
-        return plain_password == hashed_password
+        return False

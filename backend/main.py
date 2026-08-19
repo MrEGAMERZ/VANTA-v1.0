@@ -42,6 +42,47 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response, JSONResponse
+import time
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        response.headers["Content-Security-Policy"] = "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: *;"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        return response
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app):
+        super().__init__(app)
+        self.rate_limits = {}
+        self.limit = 100  # requests
+        self.window = 60  # seconds
+
+    async def dispatch(self, request, call_next):
+        client_ip = request.client.host if request.client else "127.0.0.1"
+        current_time = time.time()
+        
+        # Clean up old entries periodically or just for this IP
+        if client_ip not in self.rate_limits:
+            self.rate_limits[client_ip] = []
+            
+        # Filter timestamps within the current window
+        self.rate_limits[client_ip] = [t for t in self.rate_limits[client_ip] if current_time - t < self.window]
+        
+        if len(self.rate_limits[client_ip]) >= self.limit:
+            return JSONResponse(status_code=429, content={"detail": "Too Many Requests"})
+            
+        self.rate_limits[client_ip].append(current_time)
+        return await call_next(request)
+
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(RateLimitMiddleware)
+
 # Mount routes
 app.include_router(auth.router)
 app.include_router(complaints.router)

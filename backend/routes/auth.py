@@ -122,6 +122,10 @@ def official_login(req: OfficialLoginRequest, db: Session = Depends(get_db)):
 
 @router.post("/official/register", response_model=TokenResponse)
 def official_register(req: OfficialCreate, db: Session = Depends(get_db)):
+    allowed_roles = ["MLA", "COLLECTOR", "MP", "MINISTRY"]
+    if req.role not in allowed_roles:
+        raise HTTPException(status_code=400, detail="Invalid role specified. Must be one of: MLA, COLLECTOR, MP, MINISTRY.")
+
     existing = db.query(Official).filter(Official.email == req.email).first()
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -151,14 +155,20 @@ def official_register(req: OfficialCreate, db: Session = Depends(get_db)):
     )
 
 @router.get("/citizen/{id}", response_model=CitizenResponse)
-def get_citizen(id: str, db: Session = Depends(get_db)):
+def get_citizen(id: str, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    # IDOR check
+    if hasattr(current_user, 'role') and current_user.role == "CITIZEN" and current_user.id != id:
+        raise HTTPException(status_code=403, detail="Not authorized to view this profile")
+
     citizen = db.query(Citizen).filter(Citizen.id == id).first()
     if not citizen:
         raise HTTPException(status_code=404, detail="Citizen not found")
     return citizen
 
 @router.put("/citizen/profile", response_model=CitizenResponse)
-def update_citizen_profile(citizen_id: str, req: CitizenUpdate, db: Session = Depends(get_db)):
+def update_citizen_profile(citizen_id: str, req: CitizenUpdate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    if current_user.id != citizen_id:
+        raise HTTPException(status_code=403, detail="Not authorized to update this profile")
     citizen = db.query(Citizen).filter(Citizen.id == citizen_id).first()
     if not citizen:
         raise HTTPException(status_code=404, detail="Citizen not found")
@@ -179,7 +189,9 @@ def update_citizen_profile(citizen_id: str, req: CitizenUpdate, db: Session = De
     return citizen
 
 @router.put("/official/profile", response_model=OfficialResponse)
-def update_official_profile(official_id: str, req: OfficialUpdate, db: Session = Depends(get_db)):
+def update_official_profile(official_id: str, req: OfficialUpdate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    if current_user.id != official_id:
+        raise HTTPException(status_code=403, detail="Not authorized to update this profile")
     official = db.query(Official).filter(Official.id == official_id).first()
     if not official:
         raise HTTPException(status_code=404, detail="Official not found")

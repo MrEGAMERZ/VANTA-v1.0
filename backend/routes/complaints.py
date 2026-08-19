@@ -12,6 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Request
 from database import Session
 from datetime import datetime, timedelta
 from database import get_db
+from routes.auth import get_current_user
 from models.models import Complaint, Citizen, Official, Upvote
 from schemas.schemas import ComplaintCreate, ComplaintResponse, UpvoteRequest
 from services.ai_engine import analyze_complaint_ai, calculate_stars_rating, detect_duplicate
@@ -20,7 +21,7 @@ from services.routing import route_complaint_to_official
 router = APIRouter(prefix="/api/complaints", tags=["complaints"])
 
 @router.post("", response_model=ComplaintResponse)
-async def create_complaint(req: ComplaintCreate, request: Request, db: Session = Depends(get_db)):
+async def create_complaint(req: ComplaintCreate, request: Request, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     # 1. Run AI analysis (translation, category, sub_category, criticality score & level, vision)
     ai_data = analyze_complaint_ai(req.text_content, req.photo_urls)
     
@@ -49,8 +50,11 @@ async def create_complaint(req: ComplaintCreate, request: Request, db: Session =
     star_rating = calculate_stars_rating(criticality_score)
     
     # 3. Create Complaint Model
+    # Enforce authoritative citizen_id from the authenticated user if it's a CITIZEN
+    authoritative_citizen_id = current_user.id if getattr(current_user, 'role', 'CITIZEN') == 'CITIZEN' else req.citizen_id
+
     new_complaint = Complaint(
-        citizen_id=req.citizen_id,
+        citizen_id=authoritative_citizen_id,
         text_content=ai_data.get("translated_text", req.text_content),
         text_original=req.text_content,
         language_detected=ai_data.get("language", req.language_detected),
@@ -100,7 +104,7 @@ async def create_complaint(req: ComplaintCreate, request: Request, db: Session =
     
     # Real-time WebSocket notify
     try:
-        await request.app.state.notify_clients("NEW_COMPLAINT", new_complaint.to_dict())
+        await request.app.state.notify_clients("NEW_COMPLAINT", new_complaint.to_safe_dict())
     except Exception as e:
         print(f"WebSocket notification error: {e}")
     
@@ -113,7 +117,8 @@ def get_complaints(
     status: Optional[str] = None,
     category: Optional[str] = None,
     citizen_id: Optional[str] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     query = db.query(Complaint)
     
@@ -128,17 +133,43 @@ def get_complaints(
     if citizen_id:
         query = query.filter(Complaint.citizen_id == citizen_id)
         
-    return query.all()
+    results = query.all()
+    
+    # Redact PII for other citizens
+    is_official = getattr(current_user, 'role', 'CITIZEN') != 'CITIZEN'
+    for c in results:
+        if not is_official and c.citizen_id != current_user.id:
+            c.citizen_id = None
+            c.voice_file_url = None
+            c.location_address = "Redacted for privacy"
+            # Round coordinates to ~1.1km precision for public viewing
+            if c.location_lat: c.location_lat = round(c.location_lat, 2)
+            if c.location_lng: c.location_lng = round(c.location_lng, 2)
+            
+    return results
 
 @router.get("/{id}", response_model=ComplaintResponse)
-def get_complaint(id: str, db: Session = Depends(get_db)):
+def get_complaint(id: str, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     complaint = db.query(Complaint).filter(Complaint.id == id).first()
     if not complaint:
         raise HTTPException(status_code=404, detail="Complaint not found")
+        
+    is_official = getattr(current_user, 'role', 'CITIZEN') != 'CITIZEN'
+    if not is_official and complaint.citizen_id != current_user.id:
+        complaint.citizen_id = None
+        complaint.voice_file_url = None
+        complaint.location_address = "Redacted for privacy"
+        if complaint.location_lat: complaint.location_lat = round(complaint.location_lat, 2)
+        if complaint.location_lng: complaint.location_lng = round(complaint.location_lng, 2)
+        
     return complaint
 
 @router.put("/{id}/status", response_model=ComplaintResponse)
-async def update_complaint_status(id: str, status_val: str, request: Request, db: Session = Depends(get_db)):
+async def update_complaint_status(id: str, status_val: str, request: Request, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    # Only Officials can update status manually, or specific transitions
+    if getattr(current_user, 'role', 'CITIZEN') == 'CITIZEN':
+        raise HTTPException(status_code=403, detail="Citizens cannot manually change status")
+
     complaint = db.query(Complaint).filter(Complaint.id == id).first()
     if not complaint:
         raise HTTPException(status_code=404, detail="Complaint not found")
@@ -154,14 +185,17 @@ async def update_complaint_status(id: str, status_val: str, request: Request, db
     
     # Broadcast update
     try:
-        await request.app.state.notify_clients("STATUS_CHANGE", complaint.to_dict())
+        await request.app.state.notify_clients("STATUS_CHANGE", complaint.to_safe_dict())
     except Exception as e:
         print(f"WebSocket notification error: {e}")
         
     return complaint
 
 @router.post("/{id}/upvote", response_model=ComplaintResponse)
-async def upvote_complaint(id: str, req: UpvoteRequest, request: Request, db: Session = Depends(get_db)):
+async def upvote_complaint(id: str, req: UpvoteRequest, request: Request, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    # Enforce citizen id
+    authoritative_citizen_id = current_user.id if getattr(current_user, 'role', 'CITIZEN') == 'CITIZEN' else req.citizen_id
+
     complaint = db.query(Complaint).filter(Complaint.id == id).first()
     if not complaint:
         raise HTTPException(status_code=404, detail="Complaint not found")
@@ -169,11 +203,11 @@ async def upvote_complaint(id: str, req: UpvoteRequest, request: Request, db: Se
     # Check if already upvoted
     existing_upvote = db.query(Upvote).filter(
         Upvote.complaint_id == id,
-        Upvote.citizen_id == req.citizen_id
+        Upvote.citizen_id == authoritative_citizen_id
     ).first()
     
     if not existing_upvote:
-        upvote = Upvote(complaint_id=id, citizen_id=req.citizen_id)
+        upvote = Upvote(complaint_id=id, citizen_id=authoritative_citizen_id)
         db.add(upvote)
         complaint.upvote_count += 1
         # Recalculate stars with new upvote counts
@@ -205,7 +239,7 @@ async def upvote_complaint(id: str, req: UpvoteRequest, request: Request, db: Se
         
         # Broadcast upvote change
         try:
-            await request.app.state.notify_clients("STATUS_CHANGE", complaint.to_dict())
+            await request.app.state.notify_clients("STATUS_CHANGE", complaint.to_safe_dict())
         except Exception as e:
             print(f"WebSocket notification error: {e}")
         
