@@ -102,7 +102,7 @@ const OfficialLogin = () => {
   return (
     <div className="auth-container">
       <div className="auth-modal">
-        <Link to="/" className="back-link">
+        <Link to="/portal" className="back-link">
           <ArrowLeft size={16} /> Back to Portal
         </Link>
         

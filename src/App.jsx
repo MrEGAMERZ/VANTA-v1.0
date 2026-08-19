@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastProvider } from './components/Toast';
+import LandingPage from './pages/LandingPage';
 import Portal from './pages/Portal';
 import CitizenLogin from './pages/CitizenLogin';
 import OfficialLogin from './pages/OfficialLogin';
@@ -33,7 +34,8 @@ function App() {
     <ToastProvider>
       <Router>
       <Routes>
-        <Route path="/" element={<Portal />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/portal" element={<Portal />} />
         
         {/* Login Routes */}
         <Route path="/login/official" element={<OfficialLogin />} />
