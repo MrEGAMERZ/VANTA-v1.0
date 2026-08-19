@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from database import Session
 from datetime import datetime
 from database import get_db
-from models.models import Complaint, Official, VerificationLog
+from models.models import Complaint, Official, Citizen, VerificationLog
 from schemas.schemas import ResolutionSubmit, VerificationVote, ComplaintResponse
 
 router = APIRouter(prefix="/api/complaints", tags=["resolution"])
@@ -84,6 +84,10 @@ async def verify_complaint_resolution(
         vote=req.vote,
     )
     db.add(log)
+
+    voter = db.query(Citizen).filter(Citizen.id == req.citizen_id).first()
+    if voter:
+        voter.reward_points += 5
 
     if req.vote:
         complaint.verification_yes += 1

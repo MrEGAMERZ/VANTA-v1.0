@@ -146,7 +146,7 @@ const MpMlaScoreboard = () => {
                       className={`badge ${isRed ? 'badge-severe' : 'badge-resolved'}`}
                       style={{ minWidth: '32px', justifyContent: 'center' }}
                     >
-                      {isRed ? '4' : '0'}
+                      {mla.escalated_count ?? (isRed ? '4' : '0')}
                     </span>
                   </td>
                 </tr>

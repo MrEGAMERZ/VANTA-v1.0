@@ -13,15 +13,17 @@ const MlaDashboard = () => {
   const { showToast } = useToast();
   const [feed, setFeed] = React.useState([]);
   const [mlaInfo, setMlaInfo] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
+  const [userName, setUserName] = React.useState('Hon. MLA');
 
   const fetchDashboardData = async () => {
     try {
       const mlaId = localStorage.getItem('user_id') || 'default-mla-id';
+      const name = localStorage.getItem('user_name') || 'Hon. MLA';
+      setUserName(name);
       
       // Load Suresh's official profile stats
       const officials = await api.getOfficials();
-      const profile = officials.find(o => o.role === 'MLA') || officials[0];
+      const profile = officials.find(o => o.id === mlaId) || officials.find(o => o.role === 'MLA') || officials[0];
       setMlaInfo(profile);
 
       // Load all complaints assigned to this MLA (or for Ward 7)
@@ -73,8 +75,6 @@ const MlaDashboard = () => {
       setFeed(mapped);
     } catch (err) {
       console.error('Failed to load MLA data:', err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -98,7 +98,7 @@ const MlaDashboard = () => {
       
       showToast('Issue status marked as RESOLVED and verified.', 'success');
       fetchDashboardData();
-    } catch (err) {
+    } catch {
       showToast('Failed to resolve issue.', 'error');
     }
   };
@@ -109,7 +109,7 @@ const MlaDashboard = () => {
       <div className="mla-header-section">
         <div>
           <h1 className="mla-title">FIELD OPERATIONS — WARD 7–12</h1>
-          <div className="mla-subtitle">MLA Suresh K. · Accountability Score: {mlaInfo?.accountability_score || 74}/100 🟡 · {feed.filter(c => c.status !== 'RESOLVED').length} open complaints</div>
+          <div className="mla-subtitle">{mlaInfo?.name || userName} · Accountability Score: {mlaInfo?.accountability_score || 74}/100 🟡 · {feed.filter(c => c.status !== 'RESOLVED').length} open complaints</div>
         </div>
 
         <div className="mla-filter-bar">
@@ -227,7 +227,7 @@ const MlaDashboard = () => {
           <div className="warning-panel">
             <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
             <div>
-              4 complaints escalated to MP due to inaction. Address these to improve your score.
+              {feed.filter(c => c.status === 'ESCALATED').length} complaints escalated to MP due to inaction. Address these to improve your score.
             </div>
           </div>
 

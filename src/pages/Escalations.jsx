@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Filter, Share2, Printer, MapPin, 
-  Cpu, MessageSquare, ChevronRight, Check, Search, AlertCircle
+  Share2, Printer, MapPin, 
+  Cpu, MessageSquare, ChevronRight, AlertCircle
 } from 'lucide-react';
 import './Escalations.css';
 import { api } from '../services/api';
@@ -17,7 +17,7 @@ const Escalations = () => {
 
   const fetchEscalated = async () => {
     try {
-      const data = await api.getComplaints({ status: 'ESCALATED' });
+      const data = await api.getComplaints({ complaint_status: 'ESCALATED' });
       // Sort by priority/date
       const sorted = data.sort((a, b) => b.criticality_score - a.criticality_score);
       setComplaints(sorted);
@@ -42,7 +42,7 @@ const Escalations = () => {
       await api.updateComplaintStatus(id, newStatus);
       showToast(`Complaint status updated to ${newStatus}`, 'success');
       await fetchEscalated();
-    } catch (err) {
+    } catch {
       showToast('Failed to update status.', 'error');
     }
   };

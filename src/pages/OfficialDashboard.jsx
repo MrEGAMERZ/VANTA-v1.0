@@ -18,12 +18,14 @@ const OfficialDashboard = () => {
   useEffect(() => {
     const name = localStorage.getItem('user_name') || 'Hon. Representative';
     const role = localStorage.getItem('user_role') || 'OFFICIAL';
+    const userId = localStorage.getItem('user_id') || '';
     setProfile({ name, role });
 
     const fetchComplaints = async () => {
       try {
         const data = await api.getComplaints();
-        setComplaints(data);
+        const myComplaints = data.filter(c => c.assigned_to === userId);
+        setComplaints(myComplaints);
       } catch (err) {
         console.error('Failed to load complaints:', err);
       } finally {

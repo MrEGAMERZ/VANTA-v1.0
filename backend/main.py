@@ -92,11 +92,13 @@ def health_check():
 app.state.notify_clients = notify_clients
 
 _ESCALATION_RUNNING = False
+_AUTO_VERIFY_RUNNING = False
 
 
 @app.on_event("startup")
-async def start_escalation_sweep():
+async def start_background_sweeps():
     from services.escalation import check_and_escalate_overdue_complaints
+    from datetime import timedelta
 
     async def sweep_loop():
         global _ESCALATION_RUNNING
@@ -120,7 +122,53 @@ async def start_escalation_sweep():
                     _ESCALATION_RUNNING = False
             await asyncio.sleep(60)
 
+    async def auto_verify_loop():
+        global _AUTO_VERIFY_RUNNING
+        from models.models import Complaint, Official
+        await asyncio.sleep(30)
+        while True:
+            if not _AUTO_VERIFY_RUNNING:
+                _AUTO_VERIFY_RUNNING = True
+                try:
+                    db_session = SessionLocal()
+                    try:
+                        cutoff = datetime.utcnow() - timedelta(hours=48)
+                        pending = db_session.query(Complaint).filter(
+                            Complaint.status == "PENDING_VERIFICATION",
+                            Complaint.resolved_at != None,
+                            Complaint.resolved_at < cutoff,
+                        ).all()
+                        count = 0
+                        for complaint in pending:
+                            complaint.status = "RESOLVED"
+                            complaint.resolution_status = "AUTO_VERIFIED"
+                            complaint.verified_at = datetime.utcnow()
+                            complaint.verification_yes = complaint.verification_yes or 0
+                            if complaint.assigned_to:
+                                official = db_session.query(Official).filter(
+                                    Official.id == complaint.assigned_to
+                                ).first()
+                                if official:
+                                    official.complaints_resolved += 1
+                                    official.resolution_rate = round(
+                                        (official.complaints_resolved / max(official.complaints_assigned, 1)) * 100, 1
+                                    )
+                            count += 1
+                        if count > 0:
+                            db_session.commit()
+                            await notify_clients(
+                                "AUTO_VERIFY_SWEEP", {"count": count}
+                            )
+                    finally:
+                        db_session.close()
+                except Exception as e:
+                    print(f"[Auto-Verify Sweep Error] {e}")
+                finally:
+                    _AUTO_VERIFY_RUNNING = False
+            await asyncio.sleep(120)
+
     asyncio.create_task(sweep_loop())
+    asyncio.create_task(auto_verify_loop())
 
 
 dist_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "dist")

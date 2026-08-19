@@ -72,6 +72,11 @@ async def create_complaint(
         if official:
             official.complaints_assigned += 1
 
+    if req.citizen_id:
+        citizen = db.query(Citizen).filter(Citizen.id == req.citizen_id).first()
+        if citizen:
+            citizen.reward_points += 10
+
     db.commit()
     db.refresh(new_complaint)
 
@@ -185,6 +190,11 @@ async def upvote_complaint(
     complaint.star_rating = calculate_stars_rating(
         complaint.criticality_score, complaint.upvote_count
     )
+
+    citizen = db.query(Citizen).filter(Citizen.id == req.citizen_id).first()
+    if citizen:
+        citizen.reward_points += 2
+
     db.commit()
     db.refresh(complaint)
 

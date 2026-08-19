@@ -49,7 +49,7 @@ const Constituency = () => {
       // Refresh current details
       const updated = await api.getComplaint(selectedComplaint.id);
       setSelectedComplaint(updated);
-    } catch (err) {
+    } catch {
       showToast('Failed to execute administrative command.', 'error');
     }
   };
@@ -162,7 +162,7 @@ const Constituency = () => {
                   </button>
                   <button 
                     className="btn-secondary"
-                    onClick={() => handleAction('RESOLVED')}
+                    onClick={() => handleAction('PENDING_VERIFICATION')}
                   >
                     MARK RESOLVED
                   </button>

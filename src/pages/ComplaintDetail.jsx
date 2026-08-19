@@ -5,7 +5,6 @@ import {
   Home, AlertTriangle, Map, Play, ArrowRightLeft, AlertCircle, CheckCircle2
 } from 'lucide-react';
 import './ComplaintDetail.css';
-import { complaintsData } from '../data/mockComplaints';
 import { api } from '../services/api';
 import { useToast } from '../components/Toast';
 
@@ -53,10 +52,7 @@ const ComplaintDetail = () => {
     loadComplaintData();
   }, [id]);
 
-  // Find in mock data as fallback if not in DB
-  const mockFallback = complaintsData.find(c => c.id === id);
-
-  if (loading && !mockFallback) {
+  if (loading) {
     return (
       <div style={{ color: 'white', padding: '5rem', textAlign: 'center', fontFamily: 'Space Grotesk' }}>
         <h2>ACCESSING SECURE DATABASE TELEMETRY...</h2>
@@ -64,7 +60,19 @@ const ComplaintDetail = () => {
     );
   }
 
-  const activeComplaint = complaint || mockFallback || complaintsData[0];
+  if (error || !complaint) {
+    return (
+      <div style={{ color: 'white', padding: '5rem', textAlign: 'center', fontFamily: 'Space Grotesk' }}>
+        <h2>COMPLAINT NOT FOUND</h2>
+        <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>The requested incident could not be located in the database.</p>
+        <button onClick={() => navigate(-1)} style={{ marginTop: '1.5rem', padding: '0.75rem 1.5rem', background: 'var(--cyber-indigo)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
+          GO BACK
+        </button>
+      </div>
+    );
+  }
+
+  const activeComplaint = complaint;
 
   // Map to UI Structure
   const displayComplaint = {
@@ -96,24 +104,16 @@ const ComplaintDetail = () => {
   };
 
   const handleMarkInProgress = async () => {
-    if (!complaint) {
-      showToast("This is a mock ticket and cannot be modified.", "warning");
-      return;
-    }
     try {
       await api.updateComplaintStatus(complaint.id, 'IN_PROGRESS');
       showToast('Status updated to IN PROGRESS', 'success');
       loadComplaintData();
-    } catch (err) {
+    } catch {
       showToast('Failed to update status.', 'error');
     }
   };
 
   const handleResolve = async () => {
-    if (!complaint) {
-      showToast("This is a mock ticket and cannot be modified.", "warning");
-      return;
-    }
     const note = prompt("Enter resolution notes:");
     if (note === null) return;
     if (note.trim() === '') {
@@ -129,7 +129,7 @@ const ComplaintDetail = () => {
       });
       showToast('Resolution submitted for verification!', 'success');
       loadComplaintData();
-    } catch (err) {
+    } catch {
       showToast('Failed to submit resolution.', 'error');
     }
   };
