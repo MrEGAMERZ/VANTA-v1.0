@@ -25,7 +25,10 @@ from routes import auth, complaints, officials, map, resolution, escalation, pro
 
 # Initialize tables & seed data
 Base.metadata.create_all(bind=engine)
-seed_db()
+try:
+    seed_db()
+except Exception as e:
+    print(f"[WARN] seed_db() failed (DB may not be ready yet): {e}")
 
 app = FastAPI(
     title="VANTA — Governance Intelligence Platform API",
